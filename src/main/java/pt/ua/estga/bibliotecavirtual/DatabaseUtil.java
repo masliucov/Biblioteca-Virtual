@@ -17,12 +17,12 @@ import java.io.IOException;
 public class DatabaseUtil {
        public static Connection getConnection() {
         Properties props = new Properties();
-        // Ajuste o caminho conforme a localização do arquivo
+        // PATH do ficheiro com as credenciais da base de dados
         String path = "../database.properties/database.properties";
         try (FileInputStream in = new FileInputStream(path)) {
             props.load(in);
         } catch (IOException e) {
-            System.out.println("Erro ao carregar o arquivo de propriedades: " + e.getMessage());
+            System.out.println("Erro ao carregar o ficheiro de propriedades: " + e.getMessage());
             return null;
         }
 
@@ -33,13 +33,13 @@ public class DatabaseUtil {
         try {
             return DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
-            System.out.println("Erro ao conectar ao banco de dados: " + e.getMessage());
+            System.out.println("Erro na conexão com base de dados: " + e.getMessage());
             return null;
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("Diretório de trabalho atual: " + System.getProperty("user.dir"));
+        System.out.println("Diretório do trabalho atual: " + System.getProperty("user.dir"));
         try (Connection conn = getConnection()) {
             if (conn != null) {
                 System.out.println("Conexão estabelecida com sucesso!");
@@ -47,7 +47,7 @@ public class DatabaseUtil {
                 System.out.println("Falha ao estabelecer a conexão.");
             }
         } catch (Exception e) {
-            System.out.println("Erro durante a conexão com o banco de dados: " + e.getMessage());
+            System.out.println("Erro durante a conexão com a base de dados: " + e.getMessage());
         }
     }
 }
