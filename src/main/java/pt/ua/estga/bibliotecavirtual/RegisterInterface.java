@@ -3,11 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pt.ua.estga.bibliotecavirtual;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author arti
@@ -123,78 +125,83 @@ public class RegisterInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String username = jTextField1.getText();  // Recebe o username
-    String email = jTextField2.getText();  // Recebe o email
-    char[] passwordArray = jPasswordField1.getPassword();
-    String password = new String(passwordArray);
-    
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-    try {
-        conn = DatabaseUtil.getConnection();
-        if (conn != null) {
-            // Verificar se o username e/ou email já existem
-            String checkSql = "SELECT username, email FROM utilizador WHERE username = ? OR email = ?";
-            pstmt = conn.prepareStatement(checkSql);
-            pstmt.setString(1, username);
-            pstmt.setString(2, email);
-            rs = pstmt.executeQuery();
-            
-            boolean usernameExists = false;
-            boolean emailExists = false;
-            while (rs.next()) {
-                if (rs.getString("username") != null && rs.getString("username").equals(username)) {
-                    usernameExists = true;
-                }
-                if (rs.getString("email") != null && rs.getString("email").equals(email)) {
-                    emailExists = true;
-                }
-            }
+        String username = jTextField1.getText();  // Recebe o username
+        String email = jTextField2.getText();  // Recebe o email
+        char[] passwordArray = jPasswordField1.getPassword();
+        String password = new String(passwordArray);
 
-            if (usernameExists && emailExists) {
-                JOptionPane.showMessageDialog(null, "Erro: Username e email já registados.");
-            } else if (usernameExists) {
-                JOptionPane.showMessageDialog(null, "Erro: Username já registado.");
-            } else if (emailExists) {
-                JOptionPane.showMessageDialog(null, "Erro: Email já registado.");
-            } else {
-                // Se não existir, proceder com a inserção
-                String sql = "INSERT INTO utilizador (username, email, password) VALUES (?, ?, ?)";
-                pstmt = conn.prepareStatement(sql);
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DatabaseUtil.getConnection();
+            if (conn != null) {
+                // Verificar se o username e/ou email já existem
+                String checkSql = "SELECT username, email FROM utilizador WHERE username = ? OR email = ?";
+                pstmt = conn.prepareStatement(checkSql);
                 pstmt.setString(1, username);
                 pstmt.setString(2, email);
-                pstmt.setString(3, password);
-                int affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    JOptionPane.showMessageDialog(null, "Utilizador registado com sucesso!");
+                rs = pstmt.executeQuery();
+
+                boolean usernameExists = false;
+                boolean emailExists = false;
+                while (rs.next()) {
+                    if (rs.getString("username") != null && rs.getString("username").equals(username)) {
+                        usernameExists = true;
+                    }
+                    if (rs.getString("email") != null && rs.getString("email").equals(email)) {
+                        emailExists = true;
+                    }
+                }
+
+                if (usernameExists && emailExists) {
+                    JOptionPane.showMessageDialog(null, "Erro: Username e email já registados.");
+                } else if (usernameExists) {
+                    JOptionPane.showMessageDialog(null, "Erro: Username já registado.");
+                } else if (emailExists) {
+                    JOptionPane.showMessageDialog(null, "Erro: Email já registado.");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Erro ao registar o utilizador.");
+                    // Se não existir, proceder com a inserção
+                    String sql = "INSERT INTO utilizador (username, email, password) VALUES (?, ?, ?)";
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, username);
+                    pstmt.setString(2, email);
+                    pstmt.setString(3, password);
+                    int affectedRows = pstmt.executeUpdate();
+                    if (affectedRows > 0) {
+                        JOptionPane.showMessageDialog(null, "Utilizador registado com sucesso!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Erro ao registar o utilizador.");
+                    }
                 }
             }
-        }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Erro de SQL: " + ex.getMessage());
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao fechar recursos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro de SQL: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar recursos: " + ex.getMessage());
+            }
         }
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-             // Cria uma instância da interface LoginInterface
-            LoginInterface loginWindow = new LoginInterface();
+        // Cria uma instância da interface LoginInterface
+        LoginInterface loginWindow = new LoginInterface();
 
-            // Mete a janela LoginInterface visível
-            loginWindow.setVisible(true);
+        // Mete a janela LoginInterface visível
+        loginWindow.setVisible(true);
 
-
-            this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

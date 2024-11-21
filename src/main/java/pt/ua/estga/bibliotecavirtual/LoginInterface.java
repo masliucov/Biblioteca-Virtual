@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author arti
@@ -66,6 +67,12 @@ public class LoginInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(40, 40, 40)
+                .addComponent(jButton1)
+                .addGap(51, 51, 51))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -81,12 +88,6 @@ public class LoginInterface extends javax.swing.JFrame {
                             .addComponent(jTextField1)
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))))
                 .addContainerGap(73, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(40, 40, 40)
-                .addComponent(jButton1)
-                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,52 +113,63 @@ public class LoginInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            String usernameOrEmail = jTextField1.getText();  // Pode ser um username ou email
-    char[] passwordArray = jPasswordField1.getPassword();
-    String password = new String(passwordArray);  // Converte char[] para String
-    
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-    try {
-        conn = DatabaseUtil.getConnection();  // Obter conexão
-        String sql = "SELECT * FROM utilizador WHERE (username = ? OR email = ?) AND password = ?";
-        pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, usernameOrEmail);
-        pstmt.setString(2, usernameOrEmail);
-        pstmt.setString(3, password);
-        
-        rs = pstmt.executeQuery();
-        if (rs.next()) {
-            // Usuário autenticado com sucesso
-            JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-        } else {
-            // Usuário ou senha incorretos
-            JOptionPane.showMessageDialog(null, "Utilizador ou password incorretos!");
-        }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Erro de SQL: " + ex.getMessage());
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
-            if (conn != null) conn.close();
+        String usernameOrEmail = jTextField1.getText();  // username ou email
+        char[] passwordArray = jPasswordField1.getPassword();
+        String password = new String(passwordArray);  // converte char[] para String
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String sql = "SELECT id FROM utilizador WHERE (username = ? OR email = ?) AND password = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, usernameOrEmail);
+                pstmt.setString(2, usernameOrEmail);
+                pstmt.setString(3, password);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        int userId = rs.getInt("id");
+                        if (isFuncionario(userId)) {
+                            // se o utilizador for funcionario, direciona para DashboardAdmin
+                            new DashboardAdmin().setVisible(true);
+                        } else {
+                            // se o utilizador não for funcionario, direciona para DashboardUtilizador
+                            new DashboardUtilizador().setVisible(true);
+                        }
+                        this.dispose();
+                    } else {
+                        // utilizador ou password incorreto
+                        JOptionPane.showMessageDialog(null, "Utilizador ou password incorretos!");
+                    }
+                }
+            }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao fechar recursos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro de SQL: " + ex.getMessage());
         }
     }
-        
+
+    private boolean isFuncionario(int userId) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String query = "SELECT id_utilizador FROM funcionario WHERE id_utilizador = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setInt(1, userId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    return rs.next();  // retorna true se encontrar o id_utilizador na tabela funcionario
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar funcionário: " + e.getMessage());
+            return false;
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         // Cria uma instância da interface RegisterInterface
-         RegisterInterface registerWindow = new RegisterInterface();
+        // Cria uma instância da interface RegisterInterface
+        RegisterInterface registerWindow = new RegisterInterface();
 
-         // Mete a janela RegisterInterface visível
-         registerWindow.setVisible(true);
+        // Mete a janela RegisterInterface visível
+        registerWindow.setVisible(true);
 
-
-         this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

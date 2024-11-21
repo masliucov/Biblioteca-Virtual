@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
 /**
  *
  * @author arti
@@ -21,31 +22,33 @@ public class TabelaLivro extends javax.swing.JFrame {
     public TabelaLivro() {
         initComponents();
         carregarDados();
-        
-        
+
     }
 
-       private void carregarDados() {
+    private void carregarDados() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpa a tabela antes de carregar novos dados
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome, l.copias FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria")) {
+        String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
+                + "FROM livro l "
+                + "JOIN categoria c ON l.id_categoria = c.id_categoria";
+
+        try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id_livro");
                 String isbn = rs.getString("isbn");
                 String nome = rs.getString("nome");
                 String autor = rs.getString("autor");
-                String categoria = rs.getString("nome");
+                String categoria = rs.getString("categoria");
                 int copias = rs.getInt("copias");
                 model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace(); // Melhorar o tratamento de exceção conforme necessário
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,6 +100,11 @@ public class TabelaLivro extends javax.swing.JFrame {
         });
 
         jButton1.setText("Adicionar Livro");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Remover Livro");
 
@@ -147,36 +155,55 @@ public class TabelaLivro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-            String texto = jTextField1.getText().trim();
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0); // Limpa a tabela antes de carregar novos dados
+        String texto = jTextField1.getText().trim();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Limpa a tabela antes de carregar novos dados
 
-    String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome, l.copias FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria " + 
-                   "WHERE l.nome LIKE ? OR l.autor LIKE ? OR l.isbn LIKE ? OR c.nome LIKE ?";
+        String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
+                + "FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria "
+                + "WHERE l.nome LIKE ? OR l.autor LIKE ? OR l.isbn LIKE ? OR c.nome LIKE ? OR l.id_livro = ?";
 
-    try (Connection conn = DatabaseUtil.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-        pstmt.setString(1, "%" + texto + "%");
-        pstmt.setString(2, "%" + texto + "%");
-        pstmt.setString(3, "%" + texto + "%");
-        pstmt.setString(4, "%" + texto + "%");
+            pstmt.setString(1, "%" + texto + "%");
+            pstmt.setString(2, "%" + texto + "%");
+            pstmt.setString(3, "%" + texto + "%");
+            pstmt.setString(4, "%" + texto + "%");
 
-        ResultSet rs = pstmt.executeQuery();
+            // tenta de converter o texto para um número e usá-lo para procurar pelo ID
+            try {
+                int id = Integer.parseInt(texto);
+                pstmt.setInt(5, id); // se o texto é um número válido, usa-o para procurar pelo ID
+            } catch (NumberFormatException e) {
+                pstmt.setInt(5, -1); // se não for um número válido, define um valor que não retornará resultados
+            }
 
-        while (rs.next()) {
-            int id = rs.getInt("id_livro");
-            String isbn = rs.getString("isbn");
-            String nome = rs.getString("nome");
-            String autor = rs.getString("autor");
-            String categoria = rs.getString("nome");
-            int copias = rs.getInt("copias");
-            model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id_livro");
+                String isbn = rs.getString("isbn");
+                String nome = rs.getString("nome");
+                String autor = rs.getString("autor");
+                String categoria = rs.getString("categoria");
+                int copias = rs.getInt("copias");
+                model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace(); 
-    }
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Cria uma instância da interface AdicionarLivro
+        AdicionarLivro loginWindow = new AdicionarLivro();
+
+        // Mete a janela AdicionarLivro visível
+        loginWindow.setVisible(true);
+
+        this.dispose();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

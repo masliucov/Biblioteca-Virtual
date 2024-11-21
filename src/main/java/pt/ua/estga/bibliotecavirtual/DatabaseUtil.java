@@ -15,7 +15,8 @@ import java.io.IOException;
  * @author arti
  */
 public class DatabaseUtil {
-       public static Connection getConnection() {
+
+    public static Connection getConnection() {
         Properties props = new Properties();
         // PATH do ficheiro com as credenciais da base de dados
         String path = "../database.properties/database.properties";
