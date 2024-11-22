@@ -229,7 +229,7 @@ public class DashboardCategoria extends javax.swing.JFrame {
     private void carregarDadosNaTabela() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-
+//
         String query = "SELECT id_categoria, nome FROM categoria ORDER BY id_categoria";
 
         try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
