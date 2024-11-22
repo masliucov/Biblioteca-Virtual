@@ -114,10 +114,10 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Cria uma instância da interface TabelaLivro
-        TabelaLivro registerWindow = new TabelaLivro();
+        // Cria uma instância da interface DashboardLivro
+        DashboardLivro registerWindow = new DashboardLivro();
 
-        // Mete a janela TabelaLivro visível
+        // Mete a janela DashboardLivro visível
         registerWindow.setVisible(true);
 
         this.dispose();

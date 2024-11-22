@@ -40,6 +40,11 @@ public class DashboardLivro extends javax.swing.JFrame {
         jLabel1.setText("Dashboard Livros");
 
         jButton1.setText("Tabela de livros");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Adicionar livro");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -175,6 +180,16 @@ public class DashboardLivro extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Cria uma instância da interface TabelaLivro
+        TabelaLivro registerWindow = new TabelaLivro();
+
+        // Mete a janela TabelaLivro visível
+        registerWindow.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
