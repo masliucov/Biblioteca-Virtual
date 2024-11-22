@@ -113,50 +113,55 @@ public class LoginInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String usernameOrEmail = jTextField1.getText();  // username ou email
-        char[] passwordArray = jPasswordField1.getPassword();
-        String password = new String(passwordArray);  // converte char[] para String
+    String usernameOuEmail = jTextField1.getText();
+    String password = new String(jPasswordField1.getPassword());
 
-        try (Connection conn = DatabaseUtil.getConnection()) {
-            String sql = "SELECT id FROM utilizador WHERE (username = ? OR email = ?) AND password = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, usernameOrEmail);
-                pstmt.setString(2, usernameOrEmail);
-                pstmt.setString(3, password);
+    try (Connection conn = DatabaseUtil.getConnection()) {
+        String sql = "SELECT u.id, f.id_cargo " +
+                     "FROM utilizador u " +
+                     "LEFT JOIN funcionario f ON u.id = f.id_utilizador " +
+                     "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, usernameOuEmail);
+            pstmt.setString(2, usernameOuEmail);
+            pstmt.setString(3, password);
 
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        int userId = rs.getInt("id");
-                        if (isFuncionario(userId)) {
-                            // se o utilizador for funcionario, direciona para DashboardAdmin
-                            new DashboardAdmin().setVisible(true);
-                        } else {
-                            // se o utilizador não for funcionario, direciona para DashboardAdmin
-                            new DashboardAdmin().setVisible(true);
-                        }
-                        this.dispose();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int idUtilizador = rs.getInt("id");
+                    int idCargo = rs.getInt("id_cargo"); // pode ser null
+                    boolean isFuncionario = idCargo > 0;
+
+                    // Define os dados da sessão
+                    SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario);
+
+                    // Direciona o utilizador para a dashboard apropriada
+                    if (isFuncionario) {
+                        new DashboardAdmin().setVisible(true);
                     } else {
-                        // utilizador ou password incorreto
-                        JOptionPane.showMessageDialog(null, "Utilizador ou password incorretos!");
+                        new DashboardUtilizador().setVisible(true);
                     }
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Utilizador ou palavra-passe incorretos!");
                 }
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro de SQL: " + ex.getMessage());
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage());
+    }
     }
 
     private boolean isFuncionario(int userId) {
-        try (Connection conn = DatabaseUtil.getConnection()) {
-            String query = "SELECT id_utilizador FROM funcionario WHERE id_utilizador = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setInt(1, userId);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    return rs.next();  // retorna true se encontrar o id_utilizador na tabela funcionario
-                }
+        String query = "SELECT id_utilizador FROM funcionario WHERE id_utilizador = ?";
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); // Retorna true se o utilizador existir na tabela funcionario
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao verificar funcionário: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao verificar funcionário: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 

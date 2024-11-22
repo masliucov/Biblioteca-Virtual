@@ -4,6 +4,8 @@
  */
 package pt.ua.estga.bibliotecavirtual;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author arti
@@ -39,6 +41,11 @@ public class DashboardAdmin extends javax.swing.JFrame {
         jLabel1.setText("Dashboard Admin");
 
         jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Dashboard Livro");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -62,6 +69,11 @@ public class DashboardAdmin extends javax.swing.JFrame {
         });
 
         jButton5.setText("Dashboard Staff");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Atualizar Perfil");
 
@@ -115,7 +127,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-                // Cria uma instância da interface DashboardLivro
+        // Cria uma instância da interface DashboardLivro
         DashboardLivro registerWindow = new DashboardLivro();
 
         // Mete a janela DashboardLivro visível
@@ -125,7 +137,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                        // Cria uma instância da interface DashboardCategoria
+        // Cria uma instância da interface DashboardCategoria
         DashboardCategoria registerWindow = new DashboardCategoria();
 
         // Mete a janela DashboardCategoria visível
@@ -135,7 +147,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-                                // Cria uma instância da interface TabelaUtilizador
+        // Cria uma instância da interface TabelaUtilizador
         TabelaUtilizador registerWindow = new TabelaUtilizador();
 
         // Mete a janela TabelaUtilizador visível
@@ -143,6 +155,25 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    if (SessaoUtilizador.isFuncionario() && SessaoUtilizador.getIdCargo() == 1) {
+        DashboardStaff dashboardStaff = new DashboardStaff();
+        dashboardStaff.setVisible(true);
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Acesso negado. Apenas funcionários com cargo de administrador podem aceder a esta página.", "Acesso Negado", JOptionPane.WARNING_MESSAGE);
+    }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Cria uma instância da interface LoginInterface
+        LoginInterface registerWindow = new LoginInterface();
+
+        // Mete a janela LoginInterface visível
+        registerWindow.setVisible(true);
+
+        this.dispose();    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
