@@ -51,6 +51,11 @@ public class DashboardAdmin extends javax.swing.JFrame {
         jButton4.setText("Dashboard utilizadores");
 
         jButton5.setText("Dashboard categoria");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Atualizar perfil");
 
@@ -132,6 +137,15 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // Cria uma instância da interface DashboardCategoria
+        DashboardCategoria registerWindow = new DashboardCategoria();
+
+        // Mete a janela DashboardCategoria visível
+        registerWindow.setVisible(true);
+
+        this.dispose();    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
