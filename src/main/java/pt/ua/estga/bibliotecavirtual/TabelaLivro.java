@@ -8,7 +8,11 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -21,13 +25,70 @@ public class TabelaLivro extends javax.swing.JFrame {
      */
     public TabelaLivro() {
         initComponents();
+        setupSearchListener();
         carregarDados();
 
     }
 
+    private void setupSearchListener() {
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarDados();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarDados();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarDados();
+            }
+
+            private void filtrarDados() {
+                String texto = jTextField1.getText().trim();
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.setRowCount(0);
+
+                String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
+                        + "FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria "
+                        + "WHERE l.nome LIKE ? OR l.autor LIKE ? OR l.isbn LIKE ? OR c.nome LIKE ? OR l.id_livro = ?";
+
+                try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setString(1, "%" + texto + "%");
+                    pstmt.setString(2, "%" + texto + "%");
+                    pstmt.setString(3, "%" + texto + "%");
+                    pstmt.setString(4, "%" + texto + "%");
+
+                    try {
+                        int id = Integer.parseInt(texto);
+                        pstmt.setInt(5, id);
+                    } catch (NumberFormatException e) {
+                        pstmt.setInt(5, -1);  // Usar um valor que não retorna resultados se não for um número.
+                    }
+
+                    ResultSet rs = pstmt.executeQuery();
+                    while (rs.next()) {
+                        int id = rs.getInt("id_livro");
+                        String isbn = rs.getString("isbn");
+                        String nome = rs.getString("nome");
+                        String autor = rs.getString("autor");
+                        String categoria = rs.getString("categoria");
+                        int copias = rs.getInt("copias");
+                        model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void carregarDados() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpa a tabela antes de carregar novos dados
+        model.setRowCount(0);
 
         String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
                 + "FROM livro l "
@@ -45,7 +106,7 @@ public class TabelaLivro extends javax.swing.JFrame {
                 model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Melhorar o tratamento de exceção conforme necessário
+            e.printStackTrace();
         }
     }
 
@@ -66,6 +127,9 @@ public class TabelaLivro extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +177,15 @@ public class TabelaLivro extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Insere o ID do livro para remover");
+
+        jButton1.setText("Remover");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,9 +203,17 @@ public class TabelaLivro extends javax.swing.JFrame {
                         .addComponent(jButton3)
                         .addGap(187, 187, 187)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton4)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(109, 109, 109)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(jButton1)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,50 +233,19 @@ public class TabelaLivro extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        String texto = jTextField1.getText().trim();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpa a tabela antes de carregar novos dados
 
-        String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
-                + "FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria "
-                + "WHERE l.nome LIKE ? OR l.autor LIKE ? OR l.isbn LIKE ? OR c.nome LIKE ? OR l.id_livro = ?";
-
-        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, "%" + texto + "%");
-            pstmt.setString(2, "%" + texto + "%");
-            pstmt.setString(3, "%" + texto + "%");
-            pstmt.setString(4, "%" + texto + "%");
-
-            // tenta de converter o texto para um número e usá-lo para procurar pelo ID
-            try {
-                int id = Integer.parseInt(texto);
-                pstmt.setInt(5, id); // se o texto é um número válido, usa-o para procurar pelo ID
-            } catch (NumberFormatException e) {
-                pstmt.setInt(5, -1); // se não for um número válido, define um valor que não retornará resultados
-            }
-
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id_livro");
-                String isbn = rs.getString("isbn");
-                String nome = rs.getString("nome");
-                String autor = rs.getString("autor");
-                String categoria = rs.getString("categoria");
-                int copias = rs.getInt("copias");
-                model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -217,6 +267,36 @@ public class TabelaLivro extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String idTexto = jTextField2.getText().trim();  // Obtenha o ID do livro do campo de texto
+
+        if (idTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira um ID do livro para remover.", "ID Vazio", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Preparando a consulta SQL para remoção
+        String query = "DELETE FROM livro WHERE id_livro = ?";
+
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            int id = Integer.parseInt(idTexto);  // Converte o texto para um número inteiro
+            pstmt.setInt(1, id);  // Define o ID no comando SQL
+
+            int affectedRows = pstmt.executeUpdate();  // Executa a instrução de remoção
+
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Livro removido com sucesso!", "Remoção Concluída", JOptionPane.INFORMATION_MESSAGE);
+                carregarDados();  // Atualiza a tabela para refletir a remoção
+            } else {
+                JOptionPane.showMessageDialog(this, "Nenhum livro encontrado com esse ID.", "Não Encontrado", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "O ID do livro deve ser numérico.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao remover o livro: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,13 +334,16 @@ public class TabelaLivro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

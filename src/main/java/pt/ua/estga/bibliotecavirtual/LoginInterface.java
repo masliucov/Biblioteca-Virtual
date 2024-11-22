@@ -131,8 +131,8 @@ public class LoginInterface extends javax.swing.JFrame {
                             // se o utilizador for funcionario, direciona para DashboardAdmin
                             new DashboardAdmin().setVisible(true);
                         } else {
-                            // se o utilizador não for funcionario, direciona para DashboardUtilizador
-                            new DashboardUtilizador().setVisible(true);
+                            // se o utilizador não for funcionario, direciona para DashboardAdmin
+                            new DashboardAdmin().setVisible(true);
                         }
                         this.dispose();
                     } else {
