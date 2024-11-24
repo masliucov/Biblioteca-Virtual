@@ -9,37 +9,67 @@ package pt.ua.estga.bibliotecavirtual;
  * @author arti
  */
 public class SessaoUtilizador {
-      private static int idUtilizador = -1; // ID do utilizador que fez login
-    private static int idCargo = -1; // Cargo do utilizador (exemplo: 1 = admin)
-    private static boolean funcionario = false; // Indica se é funcionário
+    private static int idUtilizador = -1;
+    private static int idCargo = -1;
+    private static boolean funcionario = false;
+    private static String username = "";
+    private static String nomeCompleto = "";
+    private static String senha = "";
+    private static String email = "";
+    private static String contato = "";
 
-    // Define os dados do utilizador na sessão
-    public static void setUtilizador(int id, int cargo, boolean isFuncionario) {
+    public static void setUtilizador(int id, int cargo, boolean isFuncionario, String user, String nome, String password, String mail, String contact) {
         idUtilizador = id;
         idCargo = cargo;
         funcionario = isFuncionario;
+        username = user;
+        nomeCompleto = nome;
+        senha = password;
+        email = mail;
+        contato = contact;
     }
 
-    // Obtém o ID do utilizador que fez login
     public static int getIdUtilizador() {
         return idUtilizador;
     }
 
-    // Obtém o cargo do utilizador
     public static int getIdCargo() {
         return idCargo;
     }
 
-    // Verifica se o utilizador é funcionário
     public static boolean isFuncionario() {
         return funcionario;
     }
 
-    // Limpa a sessão (ex: ao fazer logout)
+    public static String getUsername() {
+        return username;
+    }
+
+    public static String getNomeCompleto() {
+        return nomeCompleto;
+    }
+
+    public static String getSenha() {
+        return senha;
+    }
+
+    public static String getEmail() {
+        return email;
+    }
+
+    public static String getContato() {
+        return contato;
+    }
+
     public static void limparSessao() {
         idUtilizador = -1;
         idCargo = -1;
         funcionario = false;
+        username = "";
+        nomeCompleto = "";
+        senha = "";
+        email = "";
+        contato = "";
     }
     
 }

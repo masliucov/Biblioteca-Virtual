@@ -21,7 +21,24 @@ public class LoginInterface extends javax.swing.JFrame {
      */
     public LoginInterface() {
         initComponents();
+        verConteudoCheckBox();
     }
+    
+        private void verConteudoCheckBox() {
+    jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jCheckBox1ActionPerformed(evt);
+        }
+    });
+}
+
+private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+    if (jCheckBox1.isSelected()) {
+        jPasswordField1.setEchoChar((char) 0); // mostra a password
+    } else {
+        jPasswordField1.setEchoChar('•'); // oculta a password
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,6 +56,7 @@ public class LoginInterface extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,16 +81,12 @@ public class LoginInterface extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("Ver password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(40, 40, 40)
-                .addComponent(jButton1)
-                .addGap(51, 51, 51))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -84,10 +98,18 @@ public class LoginInterface extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField1)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))))
                 .addContainerGap(73, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(40, 40, 40)
+                .addComponent(jButton1)
+                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,7 +124,9 @@ public class LoginInterface extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -113,11 +137,11 @@ public class LoginInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String usernameOuEmail = jTextField1.getText();
-    String password = new String(jPasswordField1.getPassword());
+    String usernameOuEmail = jTextField1.getText().trim();
+    String password = new String(jPasswordField1.getPassword()).trim();
 
     try (Connection conn = DatabaseUtil.getConnection()) {
-        String sql = "SELECT u.id, f.id_cargo " +
+        String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo " +
                      "FROM utilizador u " +
                      "LEFT JOIN funcionario f ON u.id = f.id_utilizador " +
                      "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
@@ -129,16 +153,25 @@ public class LoginInterface extends javax.swing.JFrame {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     int idUtilizador = rs.getInt("id");
-                    int idCargo = rs.getInt("id_cargo"); // pode ser null
+                    String username = rs.getString("username");
+                    String nomeCompleto = rs.getString("nome");
+                    String email = rs.getString("email");
+                    String contato = rs.getString("contacto");
+                    int idCargo = rs.getObject("id_cargo") != null ? rs.getInt("id_cargo") : -1; // Considera -1 se for null
                     boolean isFuncionario = idCargo > 0;
 
-                    // Define os dados da sessão
-                    SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario);
+                    // Atualiza a sessão com as informações completas
+                    SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario, username, nomeCompleto, password, email, contato);
 
-                    // Direciona o utilizador para a dashboard apropriada
                     if (isFuncionario) {
-                        new DashboardAdmin().setVisible(true);
+                        // Abre a dashboard de admin ou staff dependendo do cargo
+                        if (idCargo == 1) {  // Supondo que 1 seja o cargo de admin
+                            new DashboardAdmin().setVisible(true);
+                        } else {
+                            new DashboardStaff().setVisible(true);
+                        }
                     } else {
+                        // Se não for funcionário, direciona para a dashboard do utilizador
                         new DashboardUtilizador().setVisible(true);
                     }
                     this.dispose();
@@ -215,6 +248,7 @@ public class LoginInterface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

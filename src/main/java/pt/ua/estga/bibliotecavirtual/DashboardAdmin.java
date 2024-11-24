@@ -76,6 +76,11 @@ public class DashboardAdmin extends javax.swing.JFrame {
         });
 
         jButton6.setText("Atualizar Perfil");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,13 +162,13 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-    if (SessaoUtilizador.isFuncionario() && SessaoUtilizador.getIdCargo() == 1) {
-        DashboardStaff dashboardStaff = new DashboardStaff();
-        dashboardStaff.setVisible(true);
-        this.dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "Acesso negado. Apenas funcionários com cargo de administrador podem aceder a esta página.", "Acesso Negado", JOptionPane.WARNING_MESSAGE);
-    }
+        if (SessaoUtilizador.isFuncionario() && SessaoUtilizador.getIdCargo() == 1) {
+            DashboardStaff dashboardStaff = new DashboardStaff();
+            dashboardStaff.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Acesso negado. Apenas funcionários com cargo de administrador podem aceder a esta página.", "Acesso Negado", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -174,6 +179,16 @@ public class DashboardAdmin extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // Cria uma instância da interface AtualizarPerfilStaff
+        AtualizarPerfilStaff registerWindow = new AtualizarPerfilStaff();
+
+        // Mete a janela AtualizarPerfilStaff visível
+        registerWindow.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
