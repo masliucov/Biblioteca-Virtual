@@ -1,54 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pt.ua.estga.bibliotecavirtual;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
-/**
- *
- * @author arti
- */
 public class DatabaseUtil {
 
+    private static String dbUsername;
+    private static String dbPassword;
+
     public static Connection getConnection() {
-        Properties props = new Properties();
-        // PATH do ficheiro com as credenciais da base de dados
-        String path = "../database.properties/database.properties";
-        try (FileInputStream in = new FileInputStream(path)) {
-            props.load(in);
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar o ficheiro de propriedades: " + e.getMessage());
-            return null;
-        }
-
-        String url = props.getProperty("db.url");
-        String user = props.getProperty("db.user");
-        String password = props.getProperty("db.password");
-
         try {
-            return DriverManager.getConnection(url, user, password);
+            String url = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
+            return DriverManager.getConnection(url, dbUsername, dbPassword);
         } catch (Exception e) {
-            System.out.println("Erro na conexão com base de dados: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro na conexão com a base de dados: " + e.getMessage(), "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("Diretório do trabalho atual: " + System.getProperty("user.dir"));
-        try (Connection conn = getConnection()) {
-            if (conn != null) {
-                System.out.println("Conexão estabelecida com sucesso!");
-            } else {
-                System.out.println("Falha ao estabelecer a conexão.");
+        // configura o look and feel
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
-        } catch (Exception e) {
-            System.out.println("Erro durante a conexão com a base de dados: " + e.getMessage());
+        } catch (Exception ex) {
+        }
+
+        // pede as credenciais da base de dados
+        dbUsername = JOptionPane.showInputDialog(null, "Insira o username da base de dados:", "Login de Base de Dados", JOptionPane.PLAIN_MESSAGE);
+        dbPassword = JOptionPane.showInputDialog(null, "Insira a password da base de dados:", "Login de Base de Dados", JOptionPane.PLAIN_MESSAGE);
+
+        // verifica se as credenciais foram inseridas
+        if (dbUsername != null && dbPassword != null) {
+            // abre a interface de login se as credenciais foram fornecidas
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new LoginInterface().setVisible(true);
+                }
+            });
+        } else {
+            JOptionPane.showMessageDialog(null, "Credenciais da base de dados não foram fornecidas. Aplicação encerrará.", "Credenciais Ausentes", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

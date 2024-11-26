@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
-        <exec.mainClass>pt.ua.estga.bibliotecavirtual.LoginInterface</exec.mainClass>
+        <exec.mainClass>pt.ua.estga.bibliotecavirtual.DatabaseUtil</exec.mainClass>
     </properties>
     
     <dependencies>
