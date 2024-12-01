@@ -296,7 +296,7 @@ public class DashboardCategoria extends javax.swing.JFrame {
                 if (generatedKeys.next()) {
                     long newId = generatedKeys.getLong(1);
                     JOptionPane.showMessageDialog(this, "Categoria adicionada com sucesso! ID: " + newId, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                    carregarDadosNaTabela(); // Atualiza a tabela para mostrar a nova categoria
+                    carregarDadosNaTabela(); // atualiza a tabela para mostrar a nova categoria
                 } else {
                     throw new SQLException("A criação da categoria falhou, nenhum ID obtido.");
                 }
@@ -364,14 +364,6 @@ public class DashboardCategoria extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(DashboardCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -352,7 +352,7 @@ public class DashboardStaff extends javax.swing.JFrame {
             return;
         }
 
-        // Obtém o ID do cargo com base no nome selecionado no ComboBox
+        // obtem o ID do cargo com base no nome selecionado no ComboBox
         int idCargo = obterIdCargo(cargoSelecionado);
         if (idCargo == -1) {
             JOptionPane.showMessageDialog(this, "Erro ao obter o ID do cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -401,48 +401,47 @@ public class DashboardStaff extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String idUtilizadorText = jTextField4.getText().trim();
-    String cargoSelecionado = (String) jComboBox2.getSelectedItem();
+        String cargoSelecionado = (String) jComboBox2.getSelectedItem();
 
-    if (idUtilizadorText.isEmpty() || cargoSelecionado == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, insira um ID válido e selecione um cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    int idUtilizador;
-    try {
-        idUtilizador = Integer.parseInt(idUtilizadorText);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "O ID deve ser um número inteiro válido.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Obtém o ID do cargo com base no nome selecionado no ComboBox
-    int idCargo = obterIdCargo(cargoSelecionado);
-    if (idCargo == -1) {
-        JOptionPane.showMessageDialog(this, "Erro ao obter o ID do cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Insere o funcionário na tabela
-    String query = "INSERT INTO funcionario (id_utilizador, id_cargo) VALUES (?, ?)";
-
-    try (Connection conn = DatabaseUtil.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-        pstmt.setInt(1, idUtilizador);
-        pstmt.setInt(2, idCargo);
-
-        int affectedRows = pstmt.executeUpdate();
-
-        if (affectedRows > 0) {
-            JOptionPane.showMessageDialog(this, "Funcionário adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            carregarDadosNaTabela();
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro ao adicionar funcionário. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (idUtilizadorText.isEmpty() || cargoSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira um ID válido e selecione um cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao adicionar funcionário: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-    }
+
+        int idUtilizador;
+        try {
+            idUtilizador = Integer.parseInt(idUtilizadorText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "O ID deve ser um número inteiro válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // obtem o ID do cargo com base no nome selecionado no ComboBox
+        int idCargo = obterIdCargo(cargoSelecionado);
+        if (idCargo == -1) {
+            JOptionPane.showMessageDialog(this, "Erro ao obter o ID do cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // insere o funcionário na tabela
+        String query = "INSERT INTO funcionario (id_utilizador, id_cargo) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, idUtilizador);
+            pstmt.setInt(2, idCargo);
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Funcionário adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                carregarDadosNaTabela();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao adicionar funcionário. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao adicionar funcionário: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void carregarCargosNoComboBox() {
@@ -454,30 +453,28 @@ public class DashboardStaff extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String descricao = rs.getString("descricao");
-                jComboBox1.addItem(descricao); // Adiciona os nomes dos cargos ao ComboBox
+                jComboBox1.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar os cargos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void carregarCargosNoComboBox2() {
-    jComboBox2.removeAllItems();
+        jComboBox2.removeAllItems();
 
-    String query = "SELECT descricao FROM cargo ORDER BY id";
+        String query = "SELECT descricao FROM cargo ORDER BY id";
 
-    try (Connection conn = DatabaseUtil.getConnection();
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
+        try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
-        while (rs.next()) {
-            String descricao = rs.getString("descricao");
-            jComboBox2.addItem(descricao); // Adiciona os nomes dos cargos ao ComboBox
+            while (rs.next()) {
+                String descricao = rs.getString("descricao");
+                jComboBox2.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar os cargos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Erro ao carregar os cargos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
-}
 
     private int obterIdCargo(String descricao) {
         String query = "SELECT id FROM cargo WHERE descricao = ?";
@@ -494,7 +491,7 @@ public class DashboardStaff extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao obter o ID do cargo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
-        return -1; // Retorna -1 se não encontrar o ID do cargo
+        return -1; // retorna -1 se não encontrar o ID do cargo
     }
 
     /**

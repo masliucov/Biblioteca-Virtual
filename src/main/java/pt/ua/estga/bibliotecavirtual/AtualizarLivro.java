@@ -269,21 +269,21 @@ public class AtualizarLivro extends javax.swing.JFrame {
             copias = Integer.parseInt(jTextField5.getText().trim());
             if (copias < 0) {
                 JOptionPane.showMessageDialog(this, "Número de cópias não pode ser negativo.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-                return; // Encerra a execução se o número de cópias for negativo
+                return; // encerra a execução se o número de cópias for negativo
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Número de cópias deve ser um número inteiro.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-            return; // Encerra a execução se o número de cópias não for válido
+            return; // encerra a execução se o número de cópias não for válido
         }
 
-        // Obtém o ID da categoria a partir do nome
+        // obtem o ID da categoria a partir do nome
         int idCategoria = obterIdCategoria(categoriaNome);
         if (idCategoria == -1) {
             JOptionPane.showMessageDialog(this, "Categoria não encontrada.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Atualiza os dados do livro
+        // atualiza os dados do livro
         String sql = "UPDATE livro SET nome = ?, autor = ?, id_categoria = ?, imagem = ?, copias = ?, descricao = ? WHERE isbn = ?";
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -335,7 +335,7 @@ public class AtualizarLivro extends javax.swing.JFrame {
                 return rs.getInt("id_categoria");
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao buscar categoria: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao encontrar a categoria: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
         }
         return -1;
     }

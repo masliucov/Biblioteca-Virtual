@@ -23,22 +23,22 @@ public class LoginInterface extends javax.swing.JFrame {
         initComponents();
         verConteudoCheckBox();
     }
-    
-        private void verConteudoCheckBox() {
-    jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jCheckBox1ActionPerformed(evt);
-        }
-    });
-}
 
-private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
-    if (jCheckBox1.isSelected()) {
-        jPasswordField1.setEchoChar((char) 0); // mostra a password
-    } else {
-        jPasswordField1.setEchoChar('•'); // oculta a password
+    private void verConteudoCheckBox() {
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
     }
-}
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jCheckBox1.isSelected()) {
+            jPasswordField1.setEchoChar((char) 0); // mostra a password
+        } else {
+            jPasswordField1.setEchoChar('•'); // oculta a password
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -137,52 +137,52 @@ private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String usernameOuEmail = jTextField1.getText().trim();
-    String password = new String(jPasswordField1.getPassword()).trim();
+        String usernameOuEmail = jTextField1.getText().trim();
+        String password = new String(jPasswordField1.getPassword()).trim();
 
-    try (Connection conn = DatabaseUtil.getConnection()) {
-        String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo " +
-                     "FROM utilizador u " +
-                     "LEFT JOIN funcionario f ON u.id = f.id_utilizador " +
-                     "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, usernameOuEmail);
-            pstmt.setString(2, usernameOuEmail);
-            pstmt.setString(3, password);
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo "
+                    + "FROM utilizador u "
+                    + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+                    + "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, usernameOuEmail);
+                pstmt.setString(2, usernameOuEmail);
+                pstmt.setString(3, password);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    int idUtilizador = rs.getInt("id");
-                    String username = rs.getString("username");
-                    String nomeCompleto = rs.getString("nome");
-                    String email = rs.getString("email");
-                    String contato = rs.getString("contacto");
-                    int idCargo = rs.getObject("id_cargo") != null ? rs.getInt("id_cargo") : -1; // Considera -1 se for null
-                    boolean isFuncionario = idCargo > 0;
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        int idUtilizador = rs.getInt("id");
+                        String username = rs.getString("username");
+                        String nomeCompleto = rs.getString("nome");
+                        String email = rs.getString("email");
+                        String contato = rs.getString("contacto");
+                        int idCargo = rs.getObject("id_cargo") != null ? rs.getInt("id_cargo") : -1; // Considera -1 se for null
+                        boolean isFuncionario = idCargo > 0;
 
-                    // Atualiza a sessão com as informações completas
-                    SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario, username, nomeCompleto, password, email, contato);
+                        // atualiza a sessão com as informações completas
+                        SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario, username, nomeCompleto, password, email, contato);
 
-                    if (isFuncionario) {
-                        // Abre a dashboard de admin ou staff dependendo do cargo
-                        if (idCargo == 1) {  // Supondo que 1 seja o cargo de admin
-                            new DashboardAdmin().setVisible(true);
+                        if (isFuncionario) {
+                            // abre a dashboard de admin ou staff dependendo do cargo
+                            if (idCargo == 1) {  //
+                                new DashboardAdmin().setVisible(true);
+                            } else {
+                                new DashboardStaff().setVisible(true);
+                            }
                         } else {
-                            new DashboardStaff().setVisible(true);
+                            // se não for funcionário, direciona para a dashboard do utilizador
+                            new DashboardUtilizador().setVisible(true);
                         }
+                        this.dispose();
                     } else {
-                        // Se não for funcionário, direciona para a dashboard do utilizador
-                        new DashboardUtilizador().setVisible(true);
+                        JOptionPane.showMessageDialog(this, "Utilizador ou palavra-passe incorretos!");
                     }
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Utilizador ou palavra-passe incorretos!");
                 }
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage());
-    }
     }
 
     private boolean isFuncionario(int userId) {
@@ -191,7 +191,7 @@ private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
 
             pstmt.setInt(1, userId);
             try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next(); // Retorna true se o utilizador existir na tabela funcionario
+                return rs.next(); // retorna true se o utilizador existir na tabela funcionario
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao verificar funcionário: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);

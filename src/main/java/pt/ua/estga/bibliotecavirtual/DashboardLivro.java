@@ -52,7 +52,7 @@ public class DashboardLivro extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 model.setRowCount(0);
 
-                String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
+                String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias, l.preco "
                         + "FROM livro l JOIN categoria c ON l.id_categoria = c.id_categoria "
                         + "WHERE l.nome LIKE ? OR l.autor LIKE ? OR l.isbn LIKE ? OR c.nome LIKE ? OR l.id_livro = ?";
 
@@ -66,7 +66,7 @@ public class DashboardLivro extends javax.swing.JFrame {
                         int id = Integer.parseInt(texto);
                         pstmt.setInt(5, id);
                     } catch (NumberFormatException e) {
-                        pstmt.setInt(5, -1);  // Usar um valor que não retorna resultados se não for um número.
+                        pstmt.setInt(5, -1);
                     }
 
                     ResultSet rs = pstmt.executeQuery();
@@ -77,7 +77,8 @@ public class DashboardLivro extends javax.swing.JFrame {
                         String autor = rs.getString("autor");
                         String categoria = rs.getString("categoria");
                         int copias = rs.getInt("copias");
-                        model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
+                        float preco = rs.getFloat("preco");
+                        model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias, preco});
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -90,7 +91,7 @@ public class DashboardLivro extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias "
+        String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias, l.preco "
                 + "FROM livro l "
                 + "JOIN categoria c ON l.id_categoria = c.id_categoria";
 
@@ -103,7 +104,8 @@ public class DashboardLivro extends javax.swing.JFrame {
                 String autor = rs.getString("autor");
                 String categoria = rs.getString("categoria");
                 int copias = rs.getInt("copias");
-                model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias});
+                float preco = rs.getFloat("preco");
+                model.addRow(new Object[]{id, isbn, nome, autor, categoria, copias, preco});
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,7 +131,6 @@ public class DashboardLivro extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
 
@@ -143,11 +144,11 @@ public class DashboardLivro extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "isbn", "nome", "autor", "categoria", "cópias"
+                "id", "isbn", "nome", "autor", "categoria", "cópias", "preço"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -187,8 +188,6 @@ public class DashboardLivro extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jButton2.setText("Adicionar livro");
 
         jButton5.setText("Adicionar Livro");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -237,12 +236,7 @@ public class DashboardLivro extends javax.swing.JFrame {
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton2)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(47, 405, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,11 +266,6 @@ public class DashboardLivro extends javax.swing.JFrame {
                     .addComponent(jButton5)
                     .addComponent(jButton6))
                 .addContainerGap(7, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton2)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -307,25 +296,24 @@ public class DashboardLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String idTexto = jTextField2.getText().trim();  // Obtenha o ID do livro do campo de texto
+        String idTexto = jTextField2.getText().trim();  // obrem o ID do livro do campo de texto
 
         if (idTexto.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, insira um ID do livro para remover.", "ID Vazio", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Preparando a consulta SQL para remoção
         String query = "DELETE FROM livro WHERE id_livro = ?";
 
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            int id = Integer.parseInt(idTexto);  // Converte o texto para um número inteiro
-            pstmt.setInt(1, id);  // Define o ID no comando SQL
+            int id = Integer.parseInt(idTexto);  // converte o texto para um número inteiro
+            pstmt.setInt(1, id);
 
             int affectedRows = pstmt.executeUpdate();  // Executa a instrução de remoção
 
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(this, "Livro removido com sucesso!", "Remoção Concluída", JOptionPane.INFORMATION_MESSAGE);
-                carregarDados();  // Atualiza a tabela para refletir a remoção
+                carregarDados();
             } else {
                 JOptionPane.showMessageDialog(this, "Nenhum livro encontrado com esse ID.", "Não Encontrado", JOptionPane.ERROR_MESSAGE);
             }
@@ -394,7 +382,6 @@ public class DashboardLivro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

@@ -9,6 +9,7 @@ package pt.ua.estga.bibliotecavirtual;
  * @author arti
  */
 public class SessaoUtilizador {
+
     private static int idUtilizador = -1;
     private static int idCargo = -1;
     private static boolean funcionario = false;
@@ -71,5 +72,5 @@ public class SessaoUtilizador {
         email = "";
         contato = "";
     }
-    
+
 }

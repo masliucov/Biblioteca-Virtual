@@ -15,7 +15,7 @@ public class DatabaseUtil {
             String url = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
             return DriverManager.getConnection(url, dbUsername, dbPassword);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro na conexão com a base de dados: " + e.getMessage(), "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro na conexão com a Base de Dados: " + e.getMessage(), "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -33,8 +33,8 @@ public class DatabaseUtil {
         }
 
         // pede as credenciais da base de dados
-        dbUsername = JOptionPane.showInputDialog(null, "Insira o username da base de dados:", "Login de Base de Dados", JOptionPane.PLAIN_MESSAGE);
-        dbPassword = JOptionPane.showInputDialog(null, "Insira a password da base de dados:", "Login de Base de Dados", JOptionPane.PLAIN_MESSAGE);
+        dbUsername = JOptionPane.showInputDialog(null, "Insira o username da base de dados:", "Login da Base de Dados", JOptionPane.PLAIN_MESSAGE);
+        dbPassword = JOptionPane.showInputDialog(null, "Insira a password da base de dados:", "Login da Base de Dados", JOptionPane.PLAIN_MESSAGE);
 
         // verifica se as credenciais foram inseridas
         if (dbUsername != null && dbPassword != null) {
@@ -45,7 +45,7 @@ public class DatabaseUtil {
                 }
             });
         } else {
-            JOptionPane.showMessageDialog(null, "Credenciais da base de dados não foram fornecidas. Aplicação encerrará.", "Credenciais Ausentes", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Credenciais da Base de Dados não foram fornecidas. Aplicação encerrará.", "Credenciais Ausentes", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

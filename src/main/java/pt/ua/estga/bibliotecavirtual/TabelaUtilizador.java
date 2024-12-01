@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 /**
  *
  * @author arti
@@ -25,28 +24,27 @@ public class TabelaUtilizador extends javax.swing.JFrame {
      * Creates new form TabelaUtilizador
      */
     public TabelaUtilizador() {
-         initComponents();
+        initComponents();
         setupListeners();
         carregarDadosNaTabela();
     }
-private void carregarDadosNaTabela() {
+
+    private void carregarDadosNaTabela() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto " +
-                       "FROM utilizador u " +
-                       "LEFT JOIN funcionario f ON u.id = f.id_utilizador " +
-                       "WHERE f.id_utilizador IS NULL " +
-                       "ORDER BY u.id";
+        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto "
+                + "FROM utilizador u "
+                + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+                + "WHERE f.id_utilizador IS NULL "
+                + "ORDER BY u.id";
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String username = rs.getString("username");
-                String nome = rs.getString("nome"); 
+                String nome = rs.getString("nome");
                 String email = rs.getString("email");
                 String contacto = rs.getString("contacto");
                 model.addRow(new Object[]{id, username, nome, email, contacto});
@@ -54,17 +52,25 @@ private void carregarDadosNaTabela() {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar utilizadores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-}
+    }
 
     private void setupListeners() {
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) { filterTable(); }
+            public void insertUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
             @Override
-            public void removeUpdate(DocumentEvent e) { filterTable(); }
+            public void removeUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
             @Override
-            public void changedUpdate(DocumentEvent e) { filterTable(); }
-            
+            public void changedUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
             private void filterTable() {
                 String text = jTextField1.getText().trim();
                 if (text.isEmpty()) {
@@ -77,19 +83,19 @@ private void carregarDadosNaTabela() {
 
         jButton1.addActionListener(evt -> removerUtilizador());
     }
-      private void filterData(String text) {
+
+    private void filterData(String text) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto " +
-                       "FROM utilizador u " +
-                       "LEFT JOIN funcionario f ON u.id = f.id_utilizador " +
-                       "WHERE f.id_utilizador IS NULL AND " +
-                       "(u.username LIKE ? OR u.nome LIKE ? OR u.email LIKE ? OR u.contacto LIKE ?) " +
-                       "ORDER BY u.id";
+        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto "
+                + "FROM utilizador u "
+                + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+                + "WHERE f.id_utilizador IS NULL AND "
+                + "(u.username LIKE ? OR u.nome LIKE ? OR u.email LIKE ? OR u.contacto LIKE ?) "
+                + "ORDER BY u.id";
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, "%" + text + "%");
             pstmt.setString(2, "%" + text + "%");
             pstmt.setString(3, "%" + text + "%");
@@ -108,18 +114,17 @@ private void carregarDadosNaTabela() {
             JOptionPane.showMessageDialog(this, "Erro ao filtrar dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-      
-          private void removerUtilizador() {
+
+    private void removerUtilizador() {
         int userId = Integer.parseInt(jTextField2.getText().trim());
 
-        String query = "DELETE FROM utilizador WHERE id = ? AND NOT EXISTS (" +
-                       "SELECT 1 FROM funcionario WHERE id_utilizador = ?)";
+        String query = "DELETE FROM utilizador WHERE id = ? AND NOT EXISTS ("
+                + "SELECT 1 FROM funcionario WHERE id_utilizador = ?)";
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, userId);
             pstmt.setInt(2, userId);
-            
+
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(this, "Utilizador removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -131,6 +136,7 @@ private void carregarDadosNaTabela() {
             JOptionPane.showMessageDialog(this, "Erro ao remover utilizador: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -249,7 +255,7 @@ private void carregarDadosNaTabela() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-                // Cria uma instância da interface DashboardAdmin
+        // Cria uma instância da interface DashboardAdmin
         DashboardAdmin registerWindow = new DashboardAdmin();
 
         // Mete a janela DashboardAdmin visível
@@ -259,7 +265,7 @@ private void carregarDadosNaTabela() {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                       // Cria uma instância da interface LoginInterface
+        // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
         // Mete a janela LoginInterface visível

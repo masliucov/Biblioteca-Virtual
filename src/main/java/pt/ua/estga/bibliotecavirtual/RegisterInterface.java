@@ -24,21 +24,22 @@ public class RegisterInterface extends javax.swing.JFrame {
         verConteudoCheckBox();
     }
 
-            private void verConteudoCheckBox() {
-    jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jCheckBox1ActionPerformed(evt);
-        }
-    });
-}
-
-private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
-    if (jCheckBox1.isSelected()) {
-        jPasswordField1.setEchoChar((char) 0); // mostra a password
-    } else {
-        jPasswordField1.setEchoChar('•'); // oculta a password
+    private void verConteudoCheckBox() {
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
     }
-}
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jCheckBox1.isSelected()) {
+            jPasswordField1.setEchoChar((char) 0); // mostra a password
+        } else {
+            jPasswordField1.setEchoChar('•'); // oculta a password
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,8 +154,8 @@ private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String username = jTextField1.getText();  // Recebe o username
-        String email = jTextField2.getText();  // Recebe o email
+        String username = jTextField1.getText();  // recebe o username
+        String email = jTextField2.getText();  // recebe o email
         char[] passwordArray = jPasswordField1.getPassword();
         String password = new String(passwordArray);
 
@@ -164,7 +165,7 @@ private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             conn = DatabaseUtil.getConnection();
             if (conn != null) {
-                // Verificar se o username e/ou email já existem
+                // verifica se o username e/ou email já existem
                 String checkSql = "SELECT username, email FROM utilizador WHERE username = ? OR email = ?";
                 pstmt = conn.prepareStatement(checkSql);
                 pstmt.setString(1, username);
@@ -189,7 +190,7 @@ private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
                 } else if (emailExists) {
                     JOptionPane.showMessageDialog(null, "Erro: Email já registado.");
                 } else {
-                    // Se não existir, proceder com a inserção
+                    // se não existir, procede com a inserção
                     String sql = "INSERT INTO utilizador (username, email, password) VALUES (?, ?, ?)";
                     pstmt = conn.prepareStatement(sql);
                     pstmt.setString(1, username);

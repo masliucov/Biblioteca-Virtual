@@ -214,28 +214,27 @@ public class AdicionarLivro extends javax.swing.JFrame {
             return;
         }
 
-        // Coleta os dados nis jTextField/jCamoBox
         String nome = jTextField2.getText().trim();
         String autor = jTextField3.getText().trim();
         String categoriaNome = (String) jComboBox1.getSelectedItem();
-        String imagem = jTextField4.getText().trim(); // Opcional
+        String imagem = jTextField4.getText().trim();
         int copias;
 
         try {
             copias = Integer.parseInt(jTextField5.getText().trim());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Número de cópias deve ser um número inteiro.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-            return; // Encerra a execução se o número de cópias não for válido
+            return; // encerra a execução se o número de cópias não for válido
         }
 
-        // Obtenção do ID da categoria a partir do nome
+        // obtem o ID da categoria a partir do nome
         int idCategoria = obterIdCategoria(categoriaNome);
         if (idCategoria == -1) {
             JOptionPane.showMessageDialog(this, "Categoria não encontrada.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return; // Encerra a execução se a categoria não for encontrada
+            return; // encerra a execução se a categoria não for encontrada
         }
 
-        // Preparando a consulta SQL para inserção
+        // consulta SQL para inserção
         String query = "INSERT INTO livro (isbn, nome, autor, id_categoria, imagem, copias) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -264,12 +263,12 @@ public class AdicionarLivro extends javax.swing.JFrame {
             pstmt.setString(1, isbn);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return true; // ISBN já existe no banco de dados
+                return true; // ISBN já existe na base de dados
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao verificar o ISBN: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
         }
-        return false; // ISBN não encontrado, seguro para inserção
+        return false; // ISBN não encontrado
     }
 
     private int obterIdCategoria(String nomeCategoria) {
