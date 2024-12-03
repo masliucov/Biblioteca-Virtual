@@ -29,30 +29,31 @@ public class TabelaUtilizador extends javax.swing.JFrame {
         carregarDadosNaTabela();
     }
 
-    private void carregarDadosNaTabela() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
+private void carregarDadosNaTabela() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
 
-        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto "
-                + "FROM utilizador u "
-                + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
-                + "WHERE f.id_utilizador IS NULL "
-                + "ORDER BY u.id";
+    String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto, u.isActive "
+            + "FROM utilizador u "
+            + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+            + "WHERE f.id_utilizador IS NULL "
+            + "ORDER BY u.id";
 
-        try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String username = rs.getString("username");
-                String nome = rs.getString("nome");
-                String email = rs.getString("email");
-                String contacto = rs.getString("contacto");
-                model.addRow(new Object[]{id, username, nome, email, contacto});
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar utilizadores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+    try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String username = rs.getString("username");
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+            String contacto = rs.getString("contacto");
+            boolean isActive = rs.getBoolean("isActive");
+            String situacao = isActive ? "Ativo" : "Desativada";
+            model.addRow(new Object[]{id, username, nome, email, contacto, situacao});
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar utilizadores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
+}
 
     private void setupListeners() {
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
@@ -81,62 +82,90 @@ public class TabelaUtilizador extends javax.swing.JFrame {
             }
         });
 
-        jButton1.addActionListener(evt -> removerUtilizador());
+        jButton1.addActionListener(evt -> desativarUtilizador());
+        jButton4.addActionListener(evt -> ativarUtilizador());
     }
 
-    private void filterData(String text) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
+private void filterData(String text) {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
 
-        String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto "
-                + "FROM utilizador u "
-                + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
-                + "WHERE f.id_utilizador IS NULL AND "
-                + "(u.username LIKE ? OR u.nome LIKE ? OR u.email LIKE ? OR u.contacto LIKE ?) "
-                + "ORDER BY u.id";
+    String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto, u.isActive "
+            + "FROM utilizador u "
+            + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+            + "WHERE f.id_utilizador IS NULL AND ("
+            + "u.username LIKE ? OR u.nome LIKE ? OR u.email LIKE ? OR u.contacto LIKE ? OR "
+            + "CASE WHEN u.isActive = 1 THEN 'Ativo' ELSE 'Desativada' END LIKE ?) "
+            + "ORDER BY u.id";
 
-        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, "%" + text + "%");
-            pstmt.setString(2, "%" + text + "%");
-            pstmt.setString(3, "%" + text + "%");
-            pstmt.setString(4, "%" + text + "%");
+    try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+        // parâmetros de pesquisa
+        pstmt.setString(1, "%" + text + "%");
+        pstmt.setString(2, "%" + text + "%");
+        pstmt.setString(3, "%" + text + "%");
+        pstmt.setString(4, "%" + text + "%");
+        pstmt.setString(5, "%" + text + "%");
 
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String username = rs.getString("username");
-                String nome = rs.getString("nome");
-                String email = rs.getString("email");
-                String contacto = rs.getString("contacto");
-                model.addRow(new Object[]{id, username, nome, email, contacto});
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao filtrar dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String username = rs.getString("username");
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+            String contacto = rs.getString("contacto");
+            boolean isActive = rs.getBoolean("isActive");
+            String situacao = isActive ? "Ativo" : "Desativada";
+            model.addRow(new Object[]{id, username, nome, email, contacto, situacao});
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao filtrar dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
+}
+private void desativarUtilizador() {
+    int userId = Integer.parseInt(jTextField2.getText().trim());
 
-    private void removerUtilizador() {
-        int userId = Integer.parseInt(jTextField2.getText().trim());
+    // desativa a conta do utilizador
+    String query = "UPDATE utilizador SET isActive = 0 WHERE id = ? AND NOT EXISTS ("
+            + "SELECT 1 FROM funcionario WHERE id_utilizador = ?)";
 
-        String query = "DELETE FROM utilizador WHERE id = ? AND NOT EXISTS ("
-                + "SELECT 1 FROM funcionario WHERE id_utilizador = ?)";
+    try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, userId);
+        pstmt.setInt(2, userId);
 
-        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, userId);
-
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows > 0) {
-                JOptionPane.showMessageDialog(this, "Utilizador removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                carregarDadosNaTabela();
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro ao remover utilizador ou utilizador é um funcionário.", "Falha", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao remover utilizador: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            JOptionPane.showMessageDialog(this, "Utilizador desativado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            carregarDadosNaTabela();
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao desativar utilizador ou utilizador é um funcionário.", "Falha", JOptionPane.ERROR_MESSAGE);
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao desativar utilizador: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
+}
 
+private void ativarUtilizador() {
+    int userId = Integer.parseInt(jTextField3.getText().trim());
+
+    // ativa a conta do utilizador
+    String query = "UPDATE utilizador SET isActive = 1 WHERE id = ? AND NOT EXISTS ("
+            + "SELECT 1 FROM funcionario WHERE id_utilizador = ?)";
+
+    try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, userId);
+        pstmt.setInt(2, userId);
+
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            JOptionPane.showMessageDialog(this, "Utilizador ativado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            carregarDadosNaTabela();
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao ativar utilizador ou utilizador é um funcionário.", "Falha", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao ativar utilizador: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,6 +185,9 @@ public class TabelaUtilizador extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -167,11 +199,11 @@ public class TabelaUtilizador extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "username", "nome", "e-mail", "contacto"
+                "id", "username", "nome", "e-mail", "contacto", "Situação"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -182,7 +214,7 @@ public class TabelaUtilizador extends javax.swing.JFrame {
 
         jLabel2.setText("Pesquisar");
 
-        jLabel3.setText("ID do utilizador para remover");
+        jLabel3.setText("ID do utilizador para desativar");
 
         jButton1.setText("Remover");
 
@@ -200,34 +232,44 @@ public class TabelaUtilizador extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("ID do utilizador para ativar");
+
+        jButton4.setText("Ativar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(102, 102, 102)
-                        .addComponent(jButton3)))
+                        .addComponent(jButton3))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                    .addComponent(jTextField3))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,18 +279,23 @@ public class TabelaUtilizador extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addComponent(jButton3)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(14, 14, 14))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -311,12 +358,15 @@ public class TabelaUtilizador extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

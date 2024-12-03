@@ -137,55 +137,55 @@ public class LoginInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String usernameOuEmail = jTextField1.getText().trim();
-        String password = new String(jPasswordField1.getPassword()).trim();
+         String usernameOuEmail = jTextField1.getText().trim();
+    String password = new String(jPasswordField1.getPassword()).trim();
 
-        try (Connection conn = DatabaseUtil.getConnection()) {
-            String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo "
-                    + "FROM utilizador u "
-                    + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
-                    + "WHERE (u.username = ? OR u.email = ?) AND u.password = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, usernameOuEmail);
-                pstmt.setString(2, usernameOuEmail);
-                pstmt.setString(3, password);
+    try (Connection conn = DatabaseUtil.getConnection()) {
+        String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo, u.isActive "
+                + "FROM utilizador u "
+                + "LEFT JOIN funcionario f ON u.id = f.id_utilizador "
+                + "WHERE (u.username = ? OR u.email = ?) AND u.password = ? AND u.isActive = 1";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, usernameOuEmail);
+            pstmt.setString(2, usernameOuEmail);
+            pstmt.setString(3, password);
 
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        int idUtilizador = rs.getInt("id");
-                        String username = rs.getString("username");
-                        String nomeCompleto = rs.getString("nome");
-                        String email = rs.getString("email");
-                        String contato = rs.getString("contacto");
-                        int idCargo = rs.getObject("id_cargo") != null ? rs.getInt("id_cargo") : -1; // Considera -1 se for null
-                        boolean isFuncionario = idCargo > 0;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int idUtilizador = rs.getInt("id");
+                    String username = rs.getString("username");
+                    String nomeCompleto = rs.getString("nome");
+                    String email = rs.getString("email");
+                    String contato = rs.getString("contacto");
+                    int idCargo = rs.getObject("id_cargo") != null ? rs.getInt("id_cargo") : -1;
+                    boolean isFuncionario = idCargo > 0;
 
-                        // atualiza a sessão com as informações completas
-                        SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario, username, nomeCompleto, password, email, contato);
+                    // atualiza a sessão com as informações completas
+                    SessaoUtilizador.setUtilizador(idUtilizador, idCargo, isFuncionario, username, nomeCompleto, password, email, contato);
 
-                        if (isFuncionario) {
-                            // abre a dashboard de admin ou staff dependendo do cargo
-                            if (idCargo == 1) {  //
-                                new DashboardAdmin().setVisible(true);
-                            } else {
-                                new DashboardStaff().setVisible(true);
-                            }
+                    if (isFuncionario) {
+                        // abre a dashboard de admin ou staff dependendo do cargo
+                        if (idCargo == 1) {  //
+                            new DashboardAdmin().setVisible(true);
                         } else {
-                            // se não for funcionário, direciona para a dashboard do utilizador
-                            new DashboardUtilizador().setVisible(true);
+                            new DashboardStaff().setVisible(true);
                         }
-                        this.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(this, "Utilizador ou palavra-passe incorretos!");
+                        // se não for funcionário, direciona para a dashboard do utilizador
+                        new DashboardUtilizador().setVisible(true);
                     }
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Utilizador ou palavra-passe incorretos, ou a conta está desativada!");
                 }
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage());
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage());
+    }
     }
 
-    private boolean isFuncionario(int userId) {
+  private boolean isFuncionario(int userId) {
         String query = "SELECT id_utilizador FROM funcionario WHERE id_utilizador = ?";
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -197,7 +197,6 @@ public class LoginInterface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao verificar funcionário: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -360,37 +360,37 @@ public class AtualizarPerfilUtilizador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // abre uma caixa de diálogo para confirmar a exclusão da conta
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Tem certeza que deseja eliminar a sua conta? Esta ação é irreversível.",
-                "Confirmar Exclusão",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
+       // abre uma caixa de diálogo para confirmar a exclusão da conta
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Tem certeza que deseja desativar a sua conta? Esta ação é reversível apenas pelo administrador.",
+            "Confirmar Desativação",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
 
-        // se o utilizador confirmar, prossegue com a exclusão
-        if (confirm == JOptionPane.YES_OPTION) {
-            try (Connection conn = DatabaseUtil.getConnection()) {
-                String sql = "DELETE FROM utilizador WHERE id = ?";
-                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                    pstmt.setInt(1, SessaoUtilizador.getIdUtilizador());
-                    int affectedRows = pstmt.executeUpdate();
-                    if (affectedRows > 0) {
-                        JOptionPane.showMessageDialog(this, "Conta eliminada com sucesso!");
+    // se o utilizador confirmar, prossegue com a desativação
+    if (confirm == JOptionPane.YES_OPTION) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String sql = "UPDATE utilizador SET isActive = false WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows > 0) {
+                    JOptionPane.showMessageDialog(this, "Conta desativada com sucesso!");
 
-                        this.dispose();
+                    // fecha a janela atual e abre a interface de login
+                    this.dispose();
+                    java.awt.EventQueue.invokeLater(() -> {
+                        new LoginInterface().setVisible(true);
+                    });
 
-                        java.awt.EventQueue.invokeLater(() -> {
-                            new LoginInterface().setVisible(true);
-                        });
-
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erro ao eliminar conta!");
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao desativar conta!");
                 }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage(), "Erro de Base de Dados", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro de SQL: " + ex.getMessage(), "Erro de Base de Dados", JOptionPane.ERROR_MESSAGE);
         }
+    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
