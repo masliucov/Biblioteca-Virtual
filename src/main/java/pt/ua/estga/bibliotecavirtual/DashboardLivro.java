@@ -31,7 +31,7 @@ public class DashboardLivro extends javax.swing.JFrame {
     }
 
     private void setupSearchListener() {
-        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+        pesquisar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 filtrarDados();
@@ -48,8 +48,8 @@ public class DashboardLivro extends javax.swing.JFrame {
             }
 
             private void filtrarDados() {
-                String texto = jTextField1.getText().trim();
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                String texto = pesquisar.getText().trim();
+                DefaultTableModel model = (DefaultTableModel) tabelaLivros.getModel();
                 model.setRowCount(0);
 
                 String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias, l.preco "
@@ -88,7 +88,7 @@ public class DashboardLivro extends javax.swing.JFrame {
     }
 
     private void carregarDados() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tabelaLivros.getModel();
         model.setRowCount(0);
 
         String query = "SELECT l.id_livro, l.isbn, l.nome, l.autor, c.nome AS categoria, l.copias, l.preco "
@@ -123,23 +123,23 @@ public class DashboardLivro extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaLivros = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        pesquisar = new javax.swing.JTextField();
+        voltar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        idLivro = new javax.swing.JTextField();
+        removerLivro = new javax.swing.JButton();
+        adicionarLivro = new javax.swing.JButton();
+        atualizarLivro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Tabela Livros");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaLivros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -155,51 +155,51 @@ public class DashboardLivro extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaLivros);
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel2.setText("Pesquisar");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        pesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                pesquisarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Voltar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Sair");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
         jLabel3.setText("Insere o ID do livro para remover");
 
-        jButton1.setText("Remover");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        removerLivro.setText("Remover");
+        removerLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                removerLivroActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Adicionar Livro");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        adicionarLivro.setText("Adicionar Livro");
+        adicionarLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                adicionarLivroActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Atualizar Livro");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        atualizarLivro.setText("Atualizar Livro");
+        atualizarLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                atualizarLivroActionPerformed(evt);
             }
         });
 
@@ -214,28 +214,28 @@ public class DashboardLivro extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton3)
+                        .addComponent(voltar)
                         .addGap(187, 187, 187)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4))
+                        .addComponent(sair))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(109, 109, 109)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(idLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jButton1)
+                        .addComponent(removerLivro)
                         .addGap(0, 147, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jButton5)
+                .addComponent(adicionarLivro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6)
+                .addComponent(atualizarLivro)
                 .addGap(47, 405, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -248,34 +248,34 @@ public class DashboardLivro extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
-                            .addComponent(jButton3))))
+                            .addComponent(sair)
+                            .addComponent(voltar))))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(idLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(removerLivro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(adicionarLivro)
+                    .addComponent(atualizarLivro))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void pesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisarActionPerformed
 
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_pesquisarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
         // Cria uma instância da interface DashboardAdmin
         DashboardAdmin registerWindow = new DashboardAdmin();
 
@@ -283,9 +283,9 @@ public class DashboardLivro extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
@@ -293,10 +293,10 @@ public class DashboardLivro extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String idTexto = jTextField2.getText().trim();  // obrem o ID do livro do campo de texto
+    private void removerLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerLivroActionPerformed
+        String idTexto = idLivro.getText().trim();  // obrem o ID do livro do campo de texto
 
         if (idTexto.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, insira um ID do livro para remover.", "ID Vazio", JOptionPane.ERROR_MESSAGE);
@@ -322,9 +322,9 @@ public class DashboardLivro extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao remover o livro: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_removerLivroActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void adicionarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarLivroActionPerformed
         // Cria uma instância da interface AdicionarLivro
         AdicionarLivro registerWindow = new AdicionarLivro();
 
@@ -332,9 +332,9 @@ public class DashboardLivro extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_adicionarLivroActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void atualizarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarLivroActionPerformed
         // Cria uma instância da interface AtualizarLivro
         AtualizarLivro registerWindow = new AtualizarLivro();
 
@@ -342,7 +342,7 @@ public class DashboardLivro extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_atualizarLivroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -381,17 +381,17 @@ public class DashboardLivro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton adicionarLivro;
+    private javax.swing.JButton atualizarLivro;
+    private javax.swing.JTextField idLivro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField pesquisar;
+    private javax.swing.JButton removerLivro;
+    private javax.swing.JButton sair;
+    private javax.swing.JTable tabelaLivros;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

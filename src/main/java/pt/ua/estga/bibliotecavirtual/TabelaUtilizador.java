@@ -30,7 +30,7 @@ public class TabelaUtilizador extends javax.swing.JFrame {
     }
 
 private void carregarDadosNaTabela() {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    DefaultTableModel model = (DefaultTableModel) tabelaUtilizador.getModel();
     model.setRowCount(0);
 
     String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto, u.isActive "
@@ -56,7 +56,7 @@ private void carregarDadosNaTabela() {
 }
 
     private void setupListeners() {
-        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+        pesquisar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 filterTable();
@@ -73,7 +73,7 @@ private void carregarDadosNaTabela() {
             }
 
             private void filterTable() {
-                String text = jTextField1.getText().trim();
+                String text = pesquisar.getText().trim();
                 if (text.isEmpty()) {
                     carregarDadosNaTabela();
                 } else {
@@ -82,12 +82,12 @@ private void carregarDadosNaTabela() {
             }
         });
 
-        jButton1.addActionListener(evt -> desativarUtilizador());
-        jButton4.addActionListener(evt -> ativarUtilizador());
+        desativarUtilizador.addActionListener(evt -> desativarUtilizador());
+        ativarUtilizador.addActionListener(evt -> ativarUtilizador());
     }
 
 private void filterData(String text) {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    DefaultTableModel model = (DefaultTableModel) tabelaUtilizador.getModel();
     model.setRowCount(0);
 
     String query = "SELECT u.id, u.username, u.nome, u.email, u.contacto, u.isActive "
@@ -122,7 +122,7 @@ private void filterData(String text) {
     }
 }
 private void desativarUtilizador() {
-    int userId = Integer.parseInt(jTextField2.getText().trim());
+    int userId = Integer.parseInt(idUtilizador1.getText().trim());
 
     // desativa a conta do utilizador
     String query = "UPDATE utilizador SET isActive = 0 WHERE id = ? AND NOT EXISTS ("
@@ -145,7 +145,7 @@ private void desativarUtilizador() {
 }
 
 private void ativarUtilizador() {
-    int userId = Integer.parseInt(jTextField3.getText().trim());
+    int userId = Integer.parseInt(idUtilizador2.getText().trim());
 
     // ativa a conta do utilizador
     String query = "UPDATE utilizador SET isActive = 1 WHERE id = ? AND NOT EXISTS ("
@@ -177,24 +177,24 @@ private void ativarUtilizador() {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaUtilizador = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        pesquisar = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        idUtilizador1 = new javax.swing.JTextField();
+        desativarUtilizador = new javax.swing.JButton();
+        voltar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        idUtilizador2 = new javax.swing.JTextField();
+        ativarUtilizador = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Tabela utilizador");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaUtilizador.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -210,31 +210,31 @@ private void ativarUtilizador() {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaUtilizador);
 
         jLabel2.setText("Pesquisar");
 
         jLabel3.setText("ID do utilizador para desativar");
 
-        jButton1.setText("Remover");
+        desativarUtilizador.setText("Desativar");
 
-        jButton2.setText("Voltar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Sair");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
         jLabel4.setText("ID do utilizador para ativar");
 
-        jButton4.setText("Ativar");
+        ativarUtilizador.setText("Ativar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -242,19 +242,19 @@ private void ativarUtilizador() {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton2)
+                        .addComponent(voltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(102, 102, 102)
-                        .addComponent(jButton3))
+                        .addComponent(sair))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
@@ -263,12 +263,12 @@ private void ativarUtilizador() {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                    .addComponent(jTextField3))
+                    .addComponent(idUtilizador1, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                    .addComponent(idUtilizador2))
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(desativarUtilizador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ativarUtilizador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -276,32 +276,32 @@ private void ativarUtilizador() {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
+                    .addComponent(voltar)
+                    .addComponent(sair)
                     .addComponent(jLabel1))
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(idUtilizador1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(desativarUtilizador))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(idUtilizador2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ativarUtilizador))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
         // Cria uma instância da interface DashboardAdmin
         DashboardAdmin registerWindow = new DashboardAdmin();
 
@@ -309,9 +309,9 @@ private void ativarUtilizador() {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
@@ -319,7 +319,7 @@ private void ativarUtilizador() {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,18 +355,18 @@ private void ativarUtilizador() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton ativarUtilizador;
+    private javax.swing.JButton desativarUtilizador;
+    private javax.swing.JTextField idUtilizador1;
+    private javax.swing.JTextField idUtilizador2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField pesquisar;
+    private javax.swing.JButton sair;
+    private javax.swing.JTable tabelaUtilizador;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

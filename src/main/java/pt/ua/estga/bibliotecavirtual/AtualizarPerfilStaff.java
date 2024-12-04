@@ -27,7 +27,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void verConteudoCheckBox() {
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        verPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
             }
@@ -35,31 +35,31 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jCheckBox1.isSelected()) {
-            jPasswordField1.setEchoChar((char) 0); // mostra a password
+        if (verPassword.isSelected()) {
+            inserirPassword.setEchoChar((char) 0); // mostra a password
         } else {
-            jPasswordField1.setEchoChar('•'); // oculta a password
+            inserirPassword.setEchoChar('•'); // oculta a password
         }
     }
 
     private void preencherDadosStaff() {
-        jTextField1.setText(SessaoUtilizador.getUsername());
-        jTextField2.setText(SessaoUtilizador.getNomeCompleto());
-        jPasswordField1.setText(SessaoUtilizador.getSenha());
-        jTextField3.setText(SessaoUtilizador.getEmail());
-        jTextField4.setText(SessaoUtilizador.getContato());
+        inserirUsername.setText(SessaoUtilizador.getUsername());
+        inserirNome.setText(SessaoUtilizador.getNomeCompleto());
+        inserirPassword.setText(SessaoUtilizador.getSenha());
+        inserirEmail.setText(SessaoUtilizador.getEmail());
+        inserirContacto.setText(SessaoUtilizador.getContato());
     }
 
     private void configurarBotoesAtualizacao() {
-        jButton3.addActionListener(evt -> atualizarUsername());
-        jButton4.addActionListener(evt -> atualizarNome());
-        jButton5.addActionListener(evt -> atualizarSenha());
-        jButton6.addActionListener(evt -> atualizarEmail());
-        jButton7.addActionListener(evt -> atualizarContato());
+        atualizarUsername.addActionListener(evt -> atualizarUsername());
+        atualizarNome.addActionListener(evt -> atualizarNome());
+        atualizarPassword.addActionListener(evt -> atualizarSenha());
+        atualizarEmail.addActionListener(evt -> atualizarEmail());
+        atualizarContacto.addActionListener(evt -> atualizarContato());
     }
 
     private void atualizarUsername() {
-        String novoUsername = jTextField1.getText();
+        String novoUsername = inserirUsername.getText();
         try (Connection conn = DatabaseUtil.getConnection()) {
             String sql = "UPDATE utilizador SET username = ? WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void atualizarNome() {
-        String novoNome = jTextField2.getText();
+        String novoNome = inserirNome.getText();
         try (Connection conn = DatabaseUtil.getConnection()) {
             String sql = "UPDATE utilizador SET nome = ? WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -97,7 +97,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void atualizarSenha() {
-        String novaSenha = new String(jPasswordField1.getPassword());
+        String novaSenha = new String(inserirPassword.getPassword());
         try (Connection conn = DatabaseUtil.getConnection()) {
             String sql = "UPDATE utilizador SET password = ? WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -116,7 +116,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void atualizarEmail() {
-        String novoEmail = jTextField3.getText().trim();
+        String novoEmail = inserirEmail.getText().trim();
         if (!novoEmail.equals(SessaoUtilizador.getEmail())) {
             // verifica se o email já existe na base de dados
             try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement("SELECT EXISTS(SELECT 1 FROM utilizador WHERE email = ?) AS 'exists'")) {
@@ -138,7 +138,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     private void atualizarContato() {
-        String novoContato = jTextField4.getText();
+        String novoContato = inserirContacto.getText();
         try (Connection conn = DatabaseUtil.getConnection()) {
             String sql = "UPDATE utilizador SET contacto = ? WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -181,41 +181,41 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        voltar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        inserirUsername = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        inserirNome = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        inserirPassword = new javax.swing.JPasswordField();
+        verPassword = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        inserirEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        inserirContacto = new javax.swing.JTextField();
+        atualizarUsername = new javax.swing.JButton();
+        atualizarNome = new javax.swing.JButton();
+        atualizarPassword = new javax.swing.JButton();
+        atualizarEmail = new javax.swing.JButton();
+        atualizarContacto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Atualizar Perfill Staff");
 
-        jButton1.setText("Voltar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Sair");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
@@ -225,21 +225,21 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
 
         jLabel4.setText("Password");
 
-        jCheckBox1.setText("Ver Password");
+        verPassword.setText("Ver Password");
 
         jLabel5.setText("Email");
 
         jLabel6.setText("Contacto");
 
-        jButton3.setText("Atualizar");
+        atualizarUsername.setText("Atualizar");
 
-        jButton4.setText("Atualizar");
+        atualizarNome.setText("Atualizar");
 
-        jButton5.setText("Atualizar");
+        atualizarPassword.setText("Atualizar");
 
-        jButton6.setText("Atualizar");
+        atualizarEmail.setText("Atualizar");
 
-        jButton7.setText("Atualizar");
+        atualizarContacto.setText("Atualizar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -250,13 +250,13 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jCheckBox1))
+                        .addComponent(verPassword))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(voltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
                         .addComponent(jLabel1)))
                 .addGap(81, 81, 81)
-                .addComponent(jButton2)
+                .addComponent(sair)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
@@ -268,19 +268,18 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField1)
-                        .addComponent(jTextField2)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
-                    .addComponent(jTextField3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                    .addComponent(inserirUsername)
+                    .addComponent(inserirNome)
+                    .addComponent(inserirPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(inserirEmail)
+                    .addComponent(inserirContacto, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(atualizarUsername)
+                    .addComponent(atualizarNome)
+                    .addComponent(atualizarPassword)
+                    .addComponent(atualizarEmail)
+                    .addComponent(atualizarContacto))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -293,42 +292,42 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))))
+                            .addComponent(sair)
+                            .addComponent(voltar))))
                 .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(inserirUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarUsername))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(inserirNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarNome))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
+                    .addComponent(inserirPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarPassword))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
+                .addComponent(verPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6))
+                    .addComponent(inserirEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarEmail))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7))
+                    .addComponent(inserirContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarContacto))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
@@ -336,9 +335,9 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
         // Cria uma instância da interface DashboardAdmin
         DashboardAdmin registerWindow = new DashboardAdmin();
 
@@ -346,7 +345,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,24 +383,24 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton atualizarContacto;
+    private javax.swing.JButton atualizarEmail;
+    private javax.swing.JButton atualizarNome;
+    private javax.swing.JButton atualizarPassword;
+    private javax.swing.JButton atualizarUsername;
+    private javax.swing.JTextField inserirContacto;
+    private javax.swing.JTextField inserirEmail;
+    private javax.swing.JTextField inserirNome;
+    private javax.swing.JPasswordField inserirPassword;
+    private javax.swing.JTextField inserirUsername;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JButton sair;
+    private javax.swing.JCheckBox verPassword;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,47 +27,47 @@ public class DashboardUtilizador extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        listaLivros = new javax.swing.JButton();
+        verHistorico = new javax.swing.JButton();
+        devolverLivro = new javax.swing.JButton();
+        editarPerfil = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
+        verCarrinho = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Dashboard utilizador");
 
-        jButton1.setText("Lista de livros");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        listaLivros.setText("Lista de livros");
+        listaLivros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                listaLivrosActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Ver histórico");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        verHistorico.setText("Ver histórico");
+        verHistorico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                verHistoricoActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Devolver livro");
+        devolverLivro.setText("Devolver livro");
 
-        jButton6.setText("Editar perfil");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        editarPerfil.setText("Editar perfil");
+        editarPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                editarPerfilActionPerformed(evt);
             }
         });
 
-        jButton7.setText("Sair");
+        sair.setText("Sair");
 
-        jButton8.setText("Ver carrinho");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        verCarrinho.setText("Ver carrinho");
+        verCarrinho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                verCarrinhoActionPerformed(evt);
             }
         });
 
@@ -79,21 +79,21 @@ public class DashboardUtilizador extends javax.swing.JFrame {
                 .addContainerGap(105, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(38, 38, 38)
-                .addComponent(jButton7)
+                .addComponent(sair)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(listaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(verCarrinho, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                    .addComponent(verHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(devolverLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
                 .addGap(127, 127, 127)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -102,27 +102,27 @@ public class DashboardUtilizador extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton7))
+                        .addComponent(sair))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addComponent(jLabel1)))
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton1))
+                    .addComponent(verHistorico)
+                    .addComponent(listaLivros))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton8))
+                    .addComponent(devolverLivro)
+                    .addComponent(verCarrinho))
                 .addGap(53, 53, 53)
-                .addComponent(jButton6)
+                .addComponent(editarPerfil)
                 .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void listaLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaLivrosActionPerformed
         // Cria uma instância da interface ListaLivrosUtilizador
         ListaLivrosUtilizador registerWindow = new ListaLivrosUtilizador();
 
@@ -130,9 +130,9 @@ public class DashboardUtilizador extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_listaLivrosActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void editarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarPerfilActionPerformed
         // Cria uma instância da interface AtualizarPerfilUtilizador
         AtualizarPerfilUtilizador registerWindow = new AtualizarPerfilUtilizador();
 
@@ -140,9 +140,9 @@ public class DashboardUtilizador extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_editarPerfilActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void verHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verHistoricoActionPerformed
 
         int idUtilizador = SessaoUtilizador.getIdUtilizador();
 
@@ -153,9 +153,9 @@ public class DashboardUtilizador extends javax.swing.JFrame {
 
         // Fecha a janela atual do Dashboard
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_verHistoricoActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void verCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verCarrinhoActionPerformed
         // Cria uma instância da classe Carrinho
         Carrinho carrinhoWindow = Carrinho.getInstance();
 
@@ -164,7 +164,7 @@ public class DashboardUtilizador extends javax.swing.JFrame {
 
         // Fecha a janela DashboardUtilizador
         this.dispose();
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_verCarrinhoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,12 +202,12 @@ public class DashboardUtilizador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
+    private javax.swing.JButton devolverLivro;
+    private javax.swing.JButton editarPerfil;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton listaLivros;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton verCarrinho;
+    private javax.swing.JButton verHistorico;
     // End of variables declaration//GEN-END:variables
 }

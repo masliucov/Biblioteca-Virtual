@@ -25,7 +25,7 @@ public class LoginInterface extends javax.swing.JFrame {
     }
 
     private void verConteudoCheckBox() {
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        verPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
             }
@@ -33,10 +33,10 @@ public class LoginInterface extends javax.swing.JFrame {
     }
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jCheckBox1.isSelected()) {
-            jPasswordField1.setEchoChar((char) 0); // mostra a password
+        if (verPassword.isSelected()) {
+            inserirPassword.setEchoChar((char) 0); // mostra a password
         } else {
-            jPasswordField1.setEchoChar('•'); // oculta a password
+            inserirPassword.setEchoChar('•'); // oculta a password
         }
     }
 
@@ -51,12 +51,12 @@ public class LoginInterface extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        inserirLogin = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        inserirPassword = new javax.swing.JPasswordField();
+        entrar = new javax.swing.JButton();
+        criarConta = new javax.swing.JButton();
+        verPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,21 +67,21 @@ public class LoginInterface extends javax.swing.JFrame {
 
         jLabel3.setText("Password");
 
-        jButton1.setText("Entrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        entrar.setText("Entrar");
+        entrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                entrarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Criar conta");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        criarConta.setText("Criar conta");
+        criarConta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                criarContaActionPerformed(evt);
             }
         });
 
-        jCheckBox1.setText("Ver password");
+        verPassword.setText("Ver password");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,16 +99,16 @@ public class LoginInterface extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
+                            .addComponent(verPassword)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField1)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))))
+                                .addComponent(inserirLogin)
+                                .addComponent(inserirPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))))
                 .addContainerGap(73, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(criarConta)
                 .addGap(40, 40, 40)
-                .addComponent(jButton1)
+                .addComponent(entrar)
                 .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
@@ -119,26 +119,26 @@ public class LoginInterface extends javax.swing.JFrame {
                 .addGap(80, 80, 80)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inserirLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inserirPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
+                .addComponent(verPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(entrar)
+                    .addComponent(criarConta))
                 .addGap(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         String usernameOuEmail = jTextField1.getText().trim();
-    String password = new String(jPasswordField1.getPassword()).trim();
+    private void entrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrarActionPerformed
+         String usernameOuEmail = inserirLogin.getText().trim();
+    String password = new String(inserirPassword.getPassword()).trim();
 
     try (Connection conn = DatabaseUtil.getConnection()) {
         String sql = "SELECT u.id, u.username, u.nome, u.email, u.contacto, f.id_cargo, u.isActive "
@@ -197,9 +197,9 @@ public class LoginInterface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao verificar funcionário: " + e.getMessage(), "Erro de SQL", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_entrarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void criarContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarContaActionPerformed
         // Cria uma instância da interface RegisterInterface
         RegisterInterface registerWindow = new RegisterInterface();
 
@@ -207,7 +207,7 @@ public class LoginInterface extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_criarContaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,13 +245,13 @@ public class LoginInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton criarConta;
+    private javax.swing.JButton entrar;
+    private javax.swing.JTextField inserirLogin;
+    private javax.swing.JPasswordField inserirPassword;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JCheckBox verPassword;
     // End of variables declaration//GEN-END:variables
 }

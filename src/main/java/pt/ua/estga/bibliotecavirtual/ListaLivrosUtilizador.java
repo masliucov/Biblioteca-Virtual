@@ -29,7 +29,7 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
     }
 
     private void setupSearchListener() {
-        jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        pesquisar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
                 filtrarLivros();
             }
@@ -45,7 +45,7 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
     }
 
     private void carregarLivros() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tabelaLivros.getModel();
         model.setRowCount(0);  // limpa a tabela antes de carregar os dados
 
         String query = "SELECT l.isbn, l.nome, l.autor, c.nome as categoria, l.copias, l.preco "
@@ -71,10 +71,10 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
     }
 
     private void filtrarLivros() {
-        String texto = jTextField1.getText().trim().toLowerCase();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        String texto = pesquisar.getText().trim().toLowerCase();
+        DefaultTableModel model = (DefaultTableModel) tabelaLivros.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
-        jTable1.setRowSorter(tr);
+        tabelaLivros.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
     }
 
@@ -89,18 +89,18 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaLivros = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        pesquisar = new javax.swing.JTextField();
+        voltar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Lista de livros");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaLivros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -116,26 +116,26 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabelaLivros.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                tabelaLivrosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaLivros);
 
         jLabel2.setText("Pesquisar");
 
-        jButton1.setText("Voltar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton7.setText("Sair");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
@@ -148,7 +148,7 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,9 +158,9 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)
+                        .addComponent(voltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton7)))
+                        .addComponent(sair)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -168,14 +168,14 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton7))
+                    .addComponent(voltar)
+                    .addComponent(sair))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -183,7 +183,7 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
         // Cria uma instância da interface DashboardUtilizador
         DashboardUtilizador registerWindow = new DashboardUtilizador();
 
@@ -191,9 +191,9 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
@@ -201,17 +201,17 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        if (evt.getClickCount() == 2 && jTable1.getSelectedRow() != -1) {
-            int row = jTable1.getSelectedRow();
-            String isbn = jTable1.getValueAt(row, 0).toString();
+    private void tabelaLivrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaLivrosMouseClicked
+        if (evt.getClickCount() == 2 && tabelaLivros.getSelectedRow() != -1) {
+            int row = tabelaLivros.getSelectedRow();
+            String isbn = tabelaLivros.getValueAt(row, 0).toString();
             VerLivro verLivroWindow = new VerLivro(isbn);
             verLivroWindow.setVisible(true);
         }
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_tabelaLivrosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -247,12 +247,12 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField pesquisar;
+    private javax.swing.JButton sair;
+    private javax.swing.JTable tabelaLivros;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

@@ -98,12 +98,12 @@ public class VerLivro extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPreco = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        voltar = new javax.swing.JButton();
+        comprar = new javax.swing.JButton();
+        alugar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
+        verCarrinho = new javax.swing.JButton();
+        adicionarCarrinho = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(900, 900));
@@ -137,35 +137,35 @@ public class VerLivro extends javax.swing.JFrame {
 
         jPreco.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
 
-        jButton1.setText("Voltar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Comprar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        comprar.setText("Comprar");
+        comprar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                comprarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Alugar");
+        alugar.setText("Alugar");
 
-        jButton4.setText("Sair");
+        sair.setText("Sair");
 
-        jButton5.setText("Ver carrinho");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        verCarrinho.setText("Ver carrinho");
+        verCarrinho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                verCarrinhoActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Adicionar ao carrinho");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        adicionarCarrinho.setText("Adicionar ao carrinho");
+        adicionarCarrinho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                adicionarCarrinhoActionPerformed(evt);
             }
         });
 
@@ -177,11 +177,11 @@ public class VerLivro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)
+                        .addComponent(voltar)
                         .addGap(170, 170, 170)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4))
+                        .addComponent(sair))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,14 +204,14 @@ public class VerLivro extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(adicionarCarrinho)
                         .addGap(43, 43, 43)
-                        .addComponent(jButton2)
+                        .addComponent(comprar)
                         .addGap(48, 48, 48)
-                        .addComponent(jButton3)
+                        .addComponent(alugar)
                         .addGap(79, 79, 79))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton5)
+                        .addComponent(verCarrinho)
                         .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
@@ -224,12 +224,12 @@ public class VerLivro extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
-                            .addComponent(jButton1))))
+                            .addComponent(sair)
+                            .addComponent(voltar))))
                 .addGap(12, 12, 12)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(verCarrinho)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addGap(10, 10, 10)
@@ -252,33 +252,33 @@ public class VerLivro extends javax.swing.JFrame {
                 .addComponent(jPreco)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton6))
+                    .addComponent(comprar)
+                    .addComponent(alugar)
+                    .addComponent(adicionarCarrinho))
                 .addGap(51, 51, 51))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
 
         ListaLivrosUtilizador registerWindow = new ListaLivrosUtilizador();
 
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void verCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verCarrinhoActionPerformed
 
         Carrinho carrinho = Carrinho.getInstance();
 
         carrinho.setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_verCarrinhoActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void adicionarCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarCarrinhoActionPerformed
         String titulo = jTitulo.getText();
         String preco = jPreco.getText().replace("€", "").trim().replace(",", ".");
         if (isbnAtual != null && !isbnAtual.isEmpty() && !preco.isEmpty()) {
@@ -287,9 +287,9 @@ public class VerLivro extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Erro: Informação do livro incompleta.", "Erro ao Adicionar", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_adicionarCarrinhoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void comprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarActionPerformed
     Connection conn = null;
     try {
         conn = DatabaseUtil.getConnection();
@@ -351,7 +351,7 @@ public class VerLivro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao reconfigurar auto-commit: " + ex.getMessage(), "Erro de Configuração", JOptionPane.ERROR_MESSAGE);
         }
     }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_comprarActionPerformed
     private int generateCartId() {
         return (int) (Math.random() * 10000);
     }
@@ -400,13 +400,10 @@ public class VerLivro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarCarrinho;
+    private javax.swing.JButton alugar;
+    private javax.swing.JButton comprar;
     private javax.swing.JLabel jAutor;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jCategoria;
     private javax.swing.JLabel jDescricao;
     private javax.swing.JLabel jLabel1;
@@ -418,5 +415,8 @@ public class VerLivro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jPreco;
     private javax.swing.JLabel jTitulo;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton verCarrinho;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

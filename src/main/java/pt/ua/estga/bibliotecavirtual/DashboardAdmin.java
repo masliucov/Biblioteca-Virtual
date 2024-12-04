@@ -29,56 +29,56 @@ public class DashboardAdmin extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
+        dashboardLivro = new javax.swing.JButton();
+        dashboardCategoria = new javax.swing.JButton();
+        dashboardUtilizador = new javax.swing.JButton();
+        dashboardStaff = new javax.swing.JButton();
+        atualizarPerfil = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Dashboard Admin");
 
-        jButton1.setText("Sair");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Dashboard Livro");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        dashboardLivro.setText("Dashboard Livro");
+        dashboardLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                dashboardLivroActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Dashboard Categoria");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        dashboardCategoria.setText("Dashboard Categoria");
+        dashboardCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                dashboardCategoriaActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Dashboard Utilizador");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        dashboardUtilizador.setText("Dashboard Utilizador");
+        dashboardUtilizador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                dashboardUtilizadorActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Dashboard Staff");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        dashboardStaff.setText("Dashboard Staff");
+        dashboardStaff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                dashboardStaffActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Atualizar Perfil");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        atualizarPerfil.setText("Atualizar Perfil");
+        atualizarPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                atualizarPerfilActionPerformed(evt);
             }
         });
 
@@ -92,20 +92,20 @@ public class DashboardAdmin extends javax.swing.JFrame {
                         .addGap(156, 156, 156)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(sair))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))
+                            .addComponent(dashboardLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dashboardCategoria))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(dashboardUtilizador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dashboardStaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(atualizarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(123, 123, 123))
         );
         layout.setVerticalGroup(
@@ -114,24 +114,24 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                    .addComponent(sair))
                 .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
+                    .addComponent(dashboardLivro)
+                    .addComponent(dashboardUtilizador))
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton5))
+                    .addComponent(dashboardCategoria)
+                    .addComponent(dashboardStaff))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(atualizarPerfil)
                 .addGap(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void dashboardLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardLivroActionPerformed
         // Cria uma instância da interface DashboardLivro
         DashboardLivro registerWindow = new DashboardLivro();
 
@@ -139,9 +139,9 @@ public class DashboardAdmin extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_dashboardLivroActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void dashboardCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardCategoriaActionPerformed
         // Cria uma instância da interface DashboardCategoria
         DashboardCategoria registerWindow = new DashboardCategoria();
 
@@ -149,9 +149,9 @@ public class DashboardAdmin extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_dashboardCategoriaActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void dashboardUtilizadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardUtilizadorActionPerformed
         // Cria uma instância da interface TabelaUtilizador
         TabelaUtilizador registerWindow = new TabelaUtilizador();
 
@@ -159,9 +159,9 @@ public class DashboardAdmin extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_dashboardUtilizadorActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void dashboardStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardStaffActionPerformed
         if (SessaoUtilizador.isFuncionario() && SessaoUtilizador.getIdCargo() == 1) {
             DashboardStaff dashboardStaff = new DashboardStaff();
             dashboardStaff.setVisible(true);
@@ -169,18 +169,18 @@ public class DashboardAdmin extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Acesso negado. Apenas funcionários com cargo de administrador podem aceder a esta página.", "Acesso Negado", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_dashboardStaffActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
         // Mete a janela LoginInterface visível
         registerWindow.setVisible(true);
 
-        this.dispose();    }//GEN-LAST:event_jButton1ActionPerformed
+        this.dispose();    }//GEN-LAST:event_sairActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void atualizarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarPerfilActionPerformed
         // Cria uma instância da interface AtualizarPerfilStaff
         AtualizarPerfilStaff registerWindow = new AtualizarPerfilStaff();
 
@@ -188,7 +188,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_atualizarPerfilActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,12 +227,12 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton atualizarPerfil;
+    private javax.swing.JButton dashboardCategoria;
+    private javax.swing.JButton dashboardLivro;
+    private javax.swing.JButton dashboardStaff;
+    private javax.swing.JButton dashboardUtilizador;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton sair;
     // End of variables declaration//GEN-END:variables
 }

@@ -30,7 +30,7 @@ public class DashboardStaff extends javax.swing.JFrame {
     }
 
     private void carregarDadosNaTabela() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tabelaStaff.getModel();
         model.setRowCount(0);
 
         String query = "SELECT f.id_funcionario, u.username, u.nome, c.descricao AS cargo, u.email, u.contacto "
@@ -55,26 +55,26 @@ public class DashboardStaff extends javax.swing.JFrame {
     }
 
     private void configurarFiltroStaff() {
-        jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        pesquisar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                filtrarDados(jTextField1.getText().trim());
+                filtrarDados(pesquisar.getText().trim());
             }
 
             @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                filtrarDados(jTextField1.getText().trim());
+                filtrarDados(pesquisar.getText().trim());
             }
 
             @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                filtrarDados(jTextField1.getText().trim());
+                filtrarDados(pesquisar.getText().trim());
             }
         });
     }
 
     private void filtrarDados(String text) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tabelaStaff.getModel();
         model.setRowCount(0);
 
         String query = "SELECT f.id_funcionario, u.username, u.nome, c.descricao AS cargo, u.email, u.contacto "
@@ -120,29 +120,29 @@ public class DashboardStaff extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaStaff = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        pesquisar = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        idFuncionario1 = new javax.swing.JTextField();
+        removerFuncionario = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        idFuncionario2 = new javax.swing.JTextField();
+        cargo1 = new javax.swing.JComboBox<>();
+        atualizarCargo = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
+        cargo2 = new javax.swing.JComboBox<>();
+        adicionarStaff = new javax.swing.JButton();
+        voltar = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
+        idUtilizador = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Dashboard Staff");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaStaff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -158,52 +158,52 @@ public class DashboardStaff extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaStaff);
 
         jLabel2.setText("Pesquisar");
 
         jLabel3.setText("Insere o ID funcionario para remover");
 
-        jButton1.setText("Remover");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        removerFuncionario.setText("Remover");
+        removerFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                removerFuncionarioActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Insere o ID funcionario para alterar o cargo");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cargo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton2.setText("Atualizar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        atualizarCargo.setText("Atualizar");
+        atualizarCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                atualizarCargoActionPerformed(evt);
             }
         });
 
         jLabel5.setText("Insere o ID utilizador para adicinar a staff");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cargo2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton3.setText("Adicionar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        adicionarStaff.setText("Adicionar");
+        adicionarStaff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                adicionarStaffActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Voltar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                voltarActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Sair");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
@@ -216,15 +216,15 @@ public class DashboardStaff extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton4)
+                .addComponent(voltar)
                 .addGap(146, 146, 146)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
+                .addComponent(sair)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
@@ -232,31 +232,31 @@ public class DashboardStaff extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(48, 48, 48)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(idFuncionario1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(removerFuncionario)
                                 .addGap(45, 45, 45))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cargo1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(8, 8, 8))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(idFuncionario2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField4)))
+                                .addComponent(idUtilizador)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, 0, 119, Short.MAX_VALUE)
+                        .addComponent(cargo2, 0, 119, Short.MAX_VALUE)
                         .addGap(13, 13, 13)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(atualizarCargo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adicionarStaff, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
@@ -269,39 +269,39 @@ public class DashboardStaff extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton5)
-                            .addComponent(jButton4))))
+                            .addComponent(sair)
+                            .addComponent(voltar))))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(idFuncionario1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(removerFuncionario))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(idFuncionario2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cargo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarCargo))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cargo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adicionarStaff)
+                    .addComponent(idUtilizador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String idFuncionarioText = jTextField2.getText().trim();
+    private void removerFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerFuncionarioActionPerformed
+        String idFuncionarioText = idFuncionario1.getText().trim();
 
         if (idFuncionarioText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, insira um ID válido para o funcionário.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -333,11 +333,11 @@ public class DashboardStaff extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao remover o funcionário: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_removerFuncionarioActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String idFuncionarioText = jTextField3.getText().trim();
-        String cargoSelecionado = (String) jComboBox1.getSelectedItem();
+    private void atualizarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarCargoActionPerformed
+        String idFuncionarioText = idFuncionario2.getText().trim();
+        String cargoSelecionado = (String) cargo1.getSelectedItem();
 
         if (idFuncionarioText.isEmpty() || cargoSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, insira um ID válido e selecione um cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -377,9 +377,9 @@ public class DashboardStaff extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar o cargo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_atualizarCargoActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
         // Cria uma instância da interface DashboardAdmin
         DashboardAdmin registerWindow = new DashboardAdmin();
 
@@ -387,9 +387,9 @@ public class DashboardStaff extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_voltarActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         // Cria uma instância da interface LoginInterface
         LoginInterface registerWindow = new LoginInterface();
 
@@ -397,11 +397,11 @@ public class DashboardStaff extends javax.swing.JFrame {
         registerWindow.setVisible(true);
 
         this.dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String idUtilizadorText = jTextField4.getText().trim();
-        String cargoSelecionado = (String) jComboBox2.getSelectedItem();
+    private void adicionarStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarStaffActionPerformed
+        String idUtilizadorText = idUtilizador.getText().trim();
+        String cargoSelecionado = (String) cargo2.getSelectedItem();
 
         if (idUtilizadorText.isEmpty() || cargoSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, insira um ID válido e selecione um cargo.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -442,10 +442,10 @@ public class DashboardStaff extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao adicionar funcionário: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_adicionarStaffActionPerformed
 
     private void carregarCargosNoComboBox() {
-        jComboBox1.removeAllItems();
+        cargo1.removeAllItems();
 
         String query = "SELECT descricao FROM cargo ORDER BY id";
 
@@ -453,7 +453,7 @@ public class DashboardStaff extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String descricao = rs.getString("descricao");
-                jComboBox1.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
+                cargo1.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar os cargos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -461,7 +461,7 @@ public class DashboardStaff extends javax.swing.JFrame {
     }
 
     private void carregarCargosNoComboBox2() {
-        jComboBox2.removeAllItems();
+        cargo2.removeAllItems();
 
         String query = "SELECT descricao FROM cargo ORDER BY id";
 
@@ -469,7 +469,7 @@ public class DashboardStaff extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String descricao = rs.getString("descricao");
-                jComboBox2.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
+                cargo2.addItem(descricao); // adiciona os nomes dos cargos ao ComboBox
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar os cargos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -530,23 +530,23 @@ public class DashboardStaff extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton adicionarStaff;
+    private javax.swing.JButton atualizarCargo;
+    private javax.swing.JComboBox<String> cargo1;
+    private javax.swing.JComboBox<String> cargo2;
+    private javax.swing.JTextField idFuncionario1;
+    private javax.swing.JTextField idFuncionario2;
+    private javax.swing.JTextField idUtilizador;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField pesquisar;
+    private javax.swing.JButton removerFuncionario;
+    private javax.swing.JButton sair;
+    private javax.swing.JTable tabelaStaff;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

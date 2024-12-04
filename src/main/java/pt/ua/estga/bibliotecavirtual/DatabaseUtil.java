@@ -45,7 +45,7 @@ public class DatabaseUtil {
             dbUsername = usernameField.getText().trim();
             dbPassword = new String(passwordField.getPassword()).trim();
             
-            // Verifica se as credenciais foram inseridas
+            // verifica se as credenciais foram inseridas
             if (!dbUsername.isEmpty() && !dbPassword.isEmpty()) {
                 java.awt.EventQueue.invokeLater(() -> new LoginInterface().setVisible(true));
             } else {
