@@ -290,30 +290,31 @@ public class VerLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Connection conn = null;
-        try {
-            conn = DatabaseUtil.getConnection();
-            conn.setAutoCommit(false);
+    Connection conn = null;
+    try {
+        conn = DatabaseUtil.getConnection();
+        conn.setAutoCommit(false);
 
-            int cartId = generateCartId();
-            String isbn = this.isbnAtual;
-            double preco = Double.parseDouble(jPreco.getText().replace("€", "").replace(",", ".").trim());
+        int cartId = generateCartId();
+        String isbn = this.isbnAtual;
+        double preco = Double.parseDouble(jPreco.getText().replace("€", "").replace(",", ".").trim());
 
-            String getIdSql = "SELECT id_livro FROM livro WHERE isbn = ?";
-            PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
-            getIdStmt.setString(1, isbn);
-            ResultSet rs = getIdStmt.executeQuery();
+        String getIdSql = "SELECT id_livro, copias FROM livro WHERE isbn = ?";
+        PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
+        getIdStmt.setString(1, isbn);
+        ResultSet rs = getIdStmt.executeQuery();
 
-            if (rs.next()) {
-                int livroId = rs.getInt("id_livro");
+        if (rs.next() && rs.getInt("copias") > 0) {
+            int livroId = rs.getInt("id_livro");
 
-                // atualiza o numero de copias
-                String updateStockSql = "UPDATE livro SET copias = copias - 1 WHERE id_livro = ?";
-                PreparedStatement updateStockStmt = conn.prepareStatement(updateStockSql);
-                updateStockStmt.setInt(1, livroId);
-                updateStockStmt.executeUpdate();
+            // Atualiza o número de cópias se houver mais que zero disponíveis
+            String updateStockSql = "UPDATE livro SET copias = copias - 1 WHERE id_livro = ? AND copias > 0";
+            PreparedStatement updateStockStmt = conn.prepareStatement(updateStockSql);
+            updateStockStmt.setInt(1, livroId);
+            int updatedRows = updateStockStmt.executeUpdate();
 
-                // insere a transação na tabela de compras com o id_carrinho
+            if (updatedRows > 0) {
+                // Insere a transação na tabela de compras com o id_carrinho
                 String insertTransactionSql = "INSERT INTO compra (id_carrinho, id_utilizador, id_livro, data, preco) VALUES (?, ?, ?, NOW(), ?)";
                 PreparedStatement insertTransactionStmt = conn.prepareStatement(insertTransactionSql);
                 insertTransactionStmt.setInt(1, cartId);
@@ -325,27 +326,31 @@ public class VerLivro extends javax.swing.JFrame {
                 conn.commit();
                 JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!");
             } else {
-                JOptionPane.showMessageDialog(this, "Livro não encontrado na base de dados.", "Erro de Stock", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Não há cópias suficientes disponíveis para compra.", "Erro de Estoque", JOptionPane.ERROR_MESSAGE);
                 conn.rollback();
             }
-        } catch (SQLException ex) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex1) {
-                    JOptionPane.showMessageDialog(this, "Erro ao desfazer as mudanças: " + ex1.getMessage(), "Erro de Transação", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            JOptionPane.showMessageDialog(this, "Erro ao realizar a compra: " + ex.getMessage(), "Erro de Compra", JOptionPane.ERROR_MESSAGE);
-        } finally {
+        } else {
+            JOptionPane.showMessageDialog(this, "Livro não encontrado na base de dados ou sem stock disponível.", "Erro de Stock", JOptionPane.ERROR_MESSAGE);
+            conn.rollback();
+        }
+    } catch (SQLException ex) {
+        if (conn != null) {
             try {
-                if (conn != null) {
-                    conn.setAutoCommit(true);
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao reconfigurar auto-commit: " + ex.getMessage(), "Erro de Configuração", JOptionPane.ERROR_MESSAGE);
+                conn.rollback();
+            } catch (SQLException ex1) {
+                JOptionPane.showMessageDialog(this, "Erro ao desfazer as mudanças: " + ex1.getMessage(), "Erro de Transação", JOptionPane.ERROR_MESSAGE);
             }
         }
+        JOptionPane.showMessageDialog(this, "Erro ao realizar a compra: " + ex.getMessage(), "Erro de Compra", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao reconfigurar auto-commit: " + ex.getMessage(), "Erro de Configuração", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
     private int generateCartId() {
         return (int) (Math.random() * 10000);

@@ -2,18 +2,17 @@ package pt.ua.estga.bibliotecavirtual;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 public class DatabaseUtil {
 
+    private static final String DB_URL = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
     private static String dbUsername;
     private static String dbPassword;
 
     public static Connection getConnection() {
         try {
-            String url = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
-            return DriverManager.getConnection(url, dbUsername, dbPassword);
+            return DriverManager.getConnection(DB_URL, dbUsername, dbPassword);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com a Base de Dados: " + e.getMessage(), "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
             return null;
@@ -21,31 +20,49 @@ public class DatabaseUtil {
     }
 
     public static void main(String[] args) {
-        // configura o look and feel
+        // Configura o look and feel
         try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
-        // pede as credenciais da base de dados
-        dbUsername = JOptionPane.showInputDialog(null, "Insira o username da base de dados:", "Login da Base de Dados", JOptionPane.PLAIN_MESSAGE);
-        dbPassword = JOptionPane.showInputDialog(null, "Insira a password da base de dados:", "Login da Base de Dados", JOptionPane.PLAIN_MESSAGE);
+        JTextField usernameField = new JTextField();
+        JPasswordField passwordField = new JPasswordField();
 
-        // verifica se as credenciais foram inseridas
-        if (dbUsername != null && dbPassword != null) {
-            // abre a interface de login se as credenciais foram fornecidas
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new LoginInterface().setVisible(true);
-                }
-            });
+        final JComponent[] inputs = new JComponent[] {
+            new JLabel("Username"),
+            usernameField,
+            new JLabel("Password"),
+            passwordField
+        };
+
+        usernameField.addActionListener(e -> passwordField.requestFocus());
+        passwordField.addActionListener(e -> submit(usernameField, passwordField));
+
+        int result = JOptionPane.showConfirmDialog(null, inputs, "Login da Base de Dados", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            dbUsername = usernameField.getText().trim();
+            dbPassword = new String(passwordField.getPassword()).trim();
+            
+            // Verifica se as credenciais foram inseridas
+            if (!dbUsername.isEmpty() && !dbPassword.isEmpty()) {
+                java.awt.EventQueue.invokeLater(() -> new LoginInterface().setVisible(true));
+            } else {
+                JOptionPane.showMessageDialog(null, "Credenciais da Base de Dados não foram fornecidas. Aplicação encerrará.", "Credenciais Ausentes", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Credenciais da Base de Dados não foram fornecidas. Aplicação encerrará.", "Credenciais Ausentes", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Login cancelado pelo funcionario.", "Login Cancelado", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private static void submit(JTextField usernameField, JPasswordField passwordField) {
+        dbUsername = usernameField.getText().trim();
+        dbPassword = new String(passwordField.getPassword()).trim();
+        if (!dbUsername.isEmpty() && !dbPassword.isEmpty()) {
+            java.awt.EventQueue.invokeLater(() -> new LoginInterface().setVisible(true));
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.", "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
