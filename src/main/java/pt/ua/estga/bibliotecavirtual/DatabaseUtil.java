@@ -1,4 +1,4 @@
-/*package pt.ua.estga.bibliotecavirtual;
+package pt.ua.estga.bibliotecavirtual;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -67,7 +67,7 @@ public class DatabaseUtil {
     }
 
 }
-*/
+/*
 //DatabaseUtil para os testes unitarios
 package pt.ua.estga.bibliotecavirtual;
 
@@ -104,3 +104,4 @@ public class DatabaseUtil {
     }
 
 }
+*/

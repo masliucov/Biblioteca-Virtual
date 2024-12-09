@@ -51,12 +51,14 @@ public class AdicionarLivro extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         voltar = new javax.swing.JButton();
         sair = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        inserirPreco = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(60, 63, 65));
         jLabel1.setText("Adicionar Livro");
 
         jLabel2.setText("ISBN");
@@ -100,6 +102,8 @@ public class AdicionarLivro extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Preço");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,7 +126,8 @@ public class AdicionarLivro extends javax.swing.JFrame {
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel5)
-                                    .addComponent(jLabel3))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel8))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(26, 26, 26)
@@ -135,7 +140,9 @@ public class AdicionarLivro extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(inserirCopias, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(inserirCopias, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                                            .addComponent(inserirPreco)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -181,7 +188,11 @@ public class AdicionarLivro extends javax.swing.JFrame {
                             .addComponent(inserirCopias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1)))
                     .addComponent(voltar))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(inserirPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -219,12 +230,20 @@ public class AdicionarLivro extends javax.swing.JFrame {
         String categoriaNome = (String) escolherCategoria.getSelectedItem();
         String imagem = inserirImagem.getText().trim();
         int copias;
+        double preco;
 
         try {
             copias = Integer.parseInt(inserirCopias.getText().trim());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Número de cópias deve ser um número inteiro.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
             return; // encerra a execução se o número de cópias não for válido
+        }
+        
+        try {
+            preco = Double.parseDouble(inserirPreco.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Preço deve ser um número válido.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         // obtem o ID da categoria a partir do nome
@@ -235,7 +254,7 @@ public class AdicionarLivro extends javax.swing.JFrame {
         }
 
         // consulta SQL para inserção
-        String query = "INSERT INTO livro (isbn, nome, autor, id_categoria, imagem, copias) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO livro (isbn, nome, autor, id_categoria, imagem, copias, preco) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -249,6 +268,7 @@ public class AdicionarLivro extends javax.swing.JFrame {
                 pstmt.setNull(5, java.sql.Types.VARCHAR);
             }
             pstmt.setInt(6, copias);
+            pstmt.setDouble(7,preco);
 
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "Livro adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -349,6 +369,7 @@ public class AdicionarLivro extends javax.swing.JFrame {
     private javax.swing.JTextField inserirISBN;
     private javax.swing.JTextField inserirImagem;
     private javax.swing.JTextField inserirNome;
+    private javax.swing.JTextField inserirPreco;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -357,6 +378,7 @@ public class AdicionarLivro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JButton sair;
     private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
