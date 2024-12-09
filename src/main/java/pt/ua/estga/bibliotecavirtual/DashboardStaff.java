@@ -138,6 +138,7 @@ public class DashboardStaff extends javax.swing.JFrame {
         idUtilizador = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Dashboard Staff");
@@ -250,7 +251,7 @@ public class DashboardStaff extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(removerFuncionario)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cargo1, 0, 140, Short.MAX_VALUE)
+                                .addComponent(cargo1, 0, 141, Short.MAX_VALUE)
                                 .addGap(6, 6, 6)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(adicionarStaff)

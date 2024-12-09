@@ -202,6 +202,7 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
         atualizarContacto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Atualizar Perfill Staff");

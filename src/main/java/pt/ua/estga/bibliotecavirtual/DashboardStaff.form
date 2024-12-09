@@ -3,6 +3,7 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -68,7 +69,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="removerFuncionario" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="cargo1" pref="140" max="32767" attributes="0"/>
+                              <Component id="cargo1" pref="141" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           </Group>
                       </Group>

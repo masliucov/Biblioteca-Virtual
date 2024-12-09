@@ -37,6 +37,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         atualizarPerfil = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Dashboard Admin");
 

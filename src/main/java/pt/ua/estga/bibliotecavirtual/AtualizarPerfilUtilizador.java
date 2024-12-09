@@ -202,6 +202,7 @@ public class AtualizarPerfilUtilizador extends javax.swing.JFrame {
         eliminarConta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel2.setText("Username");
 
