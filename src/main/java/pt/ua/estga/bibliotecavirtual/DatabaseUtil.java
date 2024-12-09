@@ -1,4 +1,4 @@
-package pt.ua.estga.bibliotecavirtual;
+/*package pt.ua.estga.bibliotecavirtual;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -65,4 +65,42 @@ public class DatabaseUtil {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.", "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+}
+*/
+//DatabaseUtil para os testes unitarios
+package pt.ua.estga.bibliotecavirtual;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import javax.swing.JOptionPane;
+
+public class DatabaseUtil {
+
+    private static final String DB_URL = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
+    // Credenciais fixas para teste
+    private static final String DB_USERNAME = "PTDA24_02";
+    private static final String DB_PASSWORD = "Jkis$985";
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Erro na conexão com a Base de Dados: " + e.getMessage(), 
+                "Erro de Conexão", 
+                JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        Connection conn = getConnection();
+        if (conn != null) {
+            JOptionPane.showMessageDialog(null, "Conexão estabelecida com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Não foi possível estabelecer conexão.");
+        }
+    }
+
 }

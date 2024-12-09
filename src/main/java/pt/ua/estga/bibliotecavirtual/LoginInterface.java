@@ -8,7 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -208,6 +211,18 @@ public class LoginInterface extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_criarContaActionPerformed
+
+        public JTextField getInserirLogin() {
+        return inserirLogin;
+    }
+
+    public JPasswordField getInserirPassword() {
+        return inserirPassword;
+    }
+
+    public JButton getEntrar() {
+        return entrar;
+    }
 
     /**
      * @param args the command line arguments

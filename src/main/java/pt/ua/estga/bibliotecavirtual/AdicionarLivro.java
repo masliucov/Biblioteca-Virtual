@@ -257,7 +257,7 @@ public class AdicionarLivro extends javax.swing.JFrame {
         }
     }
 
-    private boolean isbnExiste(String isbn) {
+    boolean isbnExiste(String isbn) {
         String query = "SELECT isbn FROM livro WHERE isbn = ?";
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, isbn);
@@ -360,4 +360,5 @@ public class AdicionarLivro extends javax.swing.JFrame {
     private javax.swing.JButton sair;
     private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
+
 }

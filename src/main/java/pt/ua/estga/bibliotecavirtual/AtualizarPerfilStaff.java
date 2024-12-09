@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -381,6 +382,11 @@ public class AtualizarPerfilStaff extends javax.swing.JFrame {
             }
         });
     }
+    /*
+    public JTextField getInserirUsernameField() {
+    return inserirUsername;
+}
+    */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton atualizarContacto;
