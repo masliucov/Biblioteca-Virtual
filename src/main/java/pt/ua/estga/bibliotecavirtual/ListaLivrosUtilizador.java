@@ -26,6 +26,44 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
         initComponents();
         setupSearchListener();
         carregarLivros();
+        carregarSaldoAtual();
+    }
+
+    private void carregarSaldoAtual() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            if (conn != null) {
+                String sql = "SELECT saldo FROM utilizador WHERE id = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    double saldo = rs.getDouble("saldo");
+                    saldoAtual.setText(String.format("%.2f €", saldo)); // Exibe o saldo formatado
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar o saldo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setupSearchListener() {
@@ -94,6 +132,8 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
         pesquisar = new javax.swing.JTextField();
         voltar = new javax.swing.JButton();
         sair = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        saldoAtual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -140,17 +180,13 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Saldo atual:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -163,6 +199,19 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(sair)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saldoAtual)
+                        .addGap(85, 85, 85))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +227,12 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(saldoAtual))
+                .addContainerGap())
         );
 
         pack();
@@ -211,6 +265,8 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
             String isbn = tabelaLivros.getValueAt(row, 0).toString();
             VerLivro verLivroWindow = new VerLivro(isbn);
             verLivroWindow.setVisible(true);
+            
+             ListaLivrosUtilizador.this.dispose();
         }
     }//GEN-LAST:event_tabelaLivrosMouseClicked
 
@@ -250,9 +306,11 @@ public class ListaLivrosUtilizador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField pesquisar;
     private javax.swing.JButton sair;
+    private javax.swing.JLabel saldoAtual;
     private javax.swing.JTable tabelaLivros;
     private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables

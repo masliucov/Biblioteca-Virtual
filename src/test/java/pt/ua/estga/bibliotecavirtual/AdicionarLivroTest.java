@@ -42,7 +42,6 @@ public class AdicionarLivroTest {
         assertEquals(expResult, result, "ISBN vazio não deveria existir na Base de Dados.");
     }
 
-
     @Test
     public void testMain() {
         System.out.println("main");

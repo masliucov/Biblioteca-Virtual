@@ -79,8 +79,8 @@ public class DatabaseUtil {
 
     private static final String DB_URL = "jdbc:mysql://estga-dev.ua.pt:3306/PTDA24_BD_02";
     // Credenciais fixas para teste
-    private static final String DB_USERNAME = "PTDA24_02";
-    private static final String DB_PASSWORD = "Jkis$985";
+    private static final String DB_USERNAME = "********";
+    private static final String DB_PASSWORD = "********";
 
     public static Connection getConnection() {
         try {

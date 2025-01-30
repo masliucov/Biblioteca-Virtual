@@ -31,9 +31,41 @@ public class Carrinho extends javax.swing.JFrame {
     }
 
     private Carrinho() {
-        initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        verificarCarrinhoVazio();
+    initComponents();
+    setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+    verificarCarrinhoVazio();
+    carregarSaldoAtual();
+    }
+
+      private void carregarSaldoAtual() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            if (conn != null) {
+                String sql = "SELECT saldo FROM utilizador WHERE id = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    double saldo = rs.getDouble("saldo");
+                    saldoAtual.setText(String.format("%.2f €", saldo)); // Exibe o saldo formatado
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar o saldo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 // metodo para adicionar o livro ao carrinho
@@ -71,34 +103,20 @@ public class Carrinho extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        voltar = new javax.swing.JButton();
-        sair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCarrinho = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         limparCarrinho = new javax.swing.JButton();
         comprar = new javax.swing.JButton();
         jTotal = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        saldoAtual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Carrinho");
-
-        voltar.setText("Voltar");
-        voltar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                voltarActionPerformed(evt);
-            }
-        });
-
-        sair.setText("Sair");
-        sair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sairActionPerformed(evt);
-            }
-        });
 
         tabelaCarrinho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,18 +153,16 @@ public class Carrinho extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Saldo atual:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(voltar)
-                .addGap(135, 135, 135)
+                .addGap(213, 213, 213)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(sair)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(18, 18, 18)
@@ -158,20 +174,23 @@ public class Carrinho extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTotal)
                 .addGap(94, 94, 94))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(saldoAtual)
+                .addGap(107, 107, 107))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sair)
-                            .addComponent(voltar))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(saldoAtual))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -184,16 +203,6 @@ public class Carrinho extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
-        // Cria uma instância da interface DashboardUtilizador
-        DashboardUtilizador registerWindow = new DashboardUtilizador();
-
-        // Mete a janela DashboardUtilizador visível
-        registerWindow.setVisible(true);
-
-        this.dispose();
-    }//GEN-LAST:event_voltarActionPerformed
 
     private void verificarCarrinhoVazio() {
         DefaultTableModel model = (DefaultTableModel) tabelaCarrinho.getModel();
@@ -209,44 +218,75 @@ public class Carrinho extends javax.swing.JFrame {
     }//GEN-LAST:event_limparCarrinhoActionPerformed
 
     private void comprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tabelaCarrinho.getModel();
-        Connection conn = null;
-        try {
-            conn = DatabaseUtil.getConnection();
-            conn.setAutoCommit(false);
+ DefaultTableModel model = (DefaultTableModel) tabelaCarrinho.getModel();
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
+    try {
+        conn = DatabaseUtil.getConnection();
+        conn.setAutoCommit(false); // Inicia uma transação
+
+        // 1. Obter o saldo atual do utilizador
+        String saldoSql = "SELECT saldo FROM utilizador WHERE id = ?";
+        pstmt = conn.prepareStatement(saldoSql);
+        pstmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+        rs = pstmt.executeQuery();
+
+        double saldoAtual = 0;
+        if (rs.next()) {
+            saldoAtual = rs.getDouble("saldo");
+        }
+
+        // 2. Calcular o total do carrinho
+        double totalCarrinho = 0.0;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String precoStr = model.getValueAt(i, 2).toString().replace("€", "").trim().replace(",", ".");
+            try {
+                double preco = Double.parseDouble(precoStr);
+                totalCarrinho += preco;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao converter o preço: " + precoStr, "Erro de Conversão", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // 3. Verificar se o saldo é suficiente
+        if (saldoAtual >= totalCarrinho) {
             int cartId = generateCartId();
 
+            // 4. Processar cada item do carrinho
             for (int i = 0; i < model.getRowCount(); i++) {
                 String isbn = model.getValueAt(i, 0).toString();
                 double preco = Double.parseDouble(model.getValueAt(i, 2).toString().replace("€", "").replace(",", ".").trim());
 
+                // 5. Obter o id_livro e verificar o stock
                 String getIdSql = "SELECT id_livro, copias FROM livro WHERE isbn = ?";
-                PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
-                getIdStmt.setString(1, isbn);
-                ResultSet rs = getIdStmt.executeQuery();
+                pstmt = conn.prepareStatement(getIdSql);
+                pstmt.setString(1, isbn);
+                rs = pstmt.executeQuery();
 
                 if (rs.next()) {
                     int livroId = rs.getInt("id_livro");
-                    int copies = rs.getInt("copias");
+                    int copias = rs.getInt("copias");
 
-                    if (copies > 0) {
-                        // atualiza o número de cópias
+                    if (copias > 0) {
+                        // 6. Atualizar o número de cópias do livro
                         String updateCopiesSql = "UPDATE livro SET copias = copias - 1 WHERE id_livro = ?";
-                        PreparedStatement updateCopiesStmt = conn.prepareStatement(updateCopiesSql);
-                        updateCopiesStmt.setInt(1, livroId);
-                        updateCopiesStmt.executeUpdate();
+                        pstmt = conn.prepareStatement(updateCopiesSql);
+                        pstmt.setInt(1, livroId);
+                        pstmt.executeUpdate();
 
-                        // insere a transação
-                        String insertTransactionSql = "INSERT INTO compra (id_carrinho, id_utilizador, id_livro, data, preco) VALUES (?, ?, ?, NOW(), ?)";
-                        PreparedStatement insertTransactionStmt = conn.prepareStatement(insertTransactionSql);
-                        insertTransactionStmt.setInt(1, cartId);
-                        insertTransactionStmt.setInt(2, SessaoUtilizador.getIdUtilizador());
-                        insertTransactionStmt.setInt(3, livroId);
-                        insertTransactionStmt.setBigDecimal(4, BigDecimal.valueOf(preco));
-                        insertTransactionStmt.executeUpdate();
+                        // 7. Registrar a compra na tabela de compras
+                        String insertCompraSql = "INSERT INTO compra (id_carrinho, id_utilizador, id_livro, data, preco) VALUES (?, ?, ?, NOW(), ?)";
+                        pstmt = conn.prepareStatement(insertCompraSql);
+                        pstmt.setInt(1, cartId);
+                        pstmt.setInt(2, SessaoUtilizador.getIdUtilizador());
+                        pstmt.setInt(3, livroId);
+                        pstmt.setDouble(4, preco);
+                        pstmt.executeUpdate();
                     } else {
-                        JOptionPane.showMessageDialog(this, "Não existem cópias suficientes disponíveis para o ISBN: " + isbn, "Erro de Estoque", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Não há cópias suficientes disponíveis para o livro com ISBN: " + isbn, "Erro de Estoque", JOptionPane.ERROR_MESSAGE);
                         conn.rollback();
                         return;
                     }
@@ -257,36 +297,41 @@ public class Carrinho extends javax.swing.JFrame {
                 }
             }
 
+            // 8. Atualizar o saldo do utilizador
+            String updateSaldoSql = "UPDATE utilizador SET saldo = saldo - ? WHERE id = ?";
+            pstmt = conn.prepareStatement(updateSaldoSql);
+            pstmt.setDouble(1, totalCarrinho);
+            pstmt.setInt(2, SessaoUtilizador.getIdUtilizador());
+            pstmt.executeUpdate();
+
+            // 9. Confirmar a transação
             conn.commit();
-            JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!");
-            clearCart();
-        } catch (SQLException ex) {
-            try {
-                conn.rollback();
-            } catch (SQLException ex1) {
-                JOptionPane.showMessageDialog(this, "Erro ao desfazer as mudanças: " + ex1.getMessage(), "Erro de Transação", JOptionPane.ERROR_MESSAGE);
-            }
-            JOptionPane.showMessageDialog(this, "Erro durante a compra: " + ex.getMessage(), "Erro de Compra", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.setAutoCommit(true);
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao configurar auto-commit: " + ex.getMessage(), "Erro de Configuração", JOptionPane.ERROR_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            clearCart(); // Limpa o carrinho após a compra
+        } else {
+            JOptionPane.showMessageDialog(this, "Saldo insuficiente para realizar a compra.", "Saldo Insuficiente", JOptionPane.WARNING_MESSAGE);
+            conn.rollback();
         }
+    } catch (SQLException e) {
+        try {
+            if (conn != null) conn.rollback(); // Desfaz a transação em caso de erro
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(this, "Erro ao processar a compra: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) {
+                conn.setAutoCommit(true); // Restaura o auto-commit
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     }//GEN-LAST:event_comprarActionPerformed
-
-    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
-        // Cria uma instância da interface LoginInterface
-        LoginInterface registerWindow = new LoginInterface();
-
-        // Mete a janela LoginInterface visível
-        registerWindow.setVisible(true);
-
-        this.dispose();
-    }//GEN-LAST:event_sairActionPerformed
 
     private void clearCart() {
         DefaultTableModel model = (DefaultTableModel) tabelaCarrinho.getModel();
@@ -338,12 +383,12 @@ public class Carrinho extends javax.swing.JFrame {
     private javax.swing.JButton comprar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jTotal;
     private javax.swing.JButton limparCarrinho;
-    private javax.swing.JButton sair;
+    private javax.swing.JLabel saldoAtual;
     private javax.swing.JTable tabelaCarrinho;
-    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 
 }

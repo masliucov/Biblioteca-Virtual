@@ -33,8 +33,40 @@ public class VerLivro extends javax.swing.JFrame {
         initComponents();
         this.isbnAtual = isbn;
         carregarDadosLivro(isbn);
+        carregarSaldoAtual();
     }
 
+      private void carregarSaldoAtual() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            if (conn != null) {
+                String sql = "SELECT saldo FROM utilizador WHERE id = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    double saldo = rs.getDouble("saldo");
+                    saldoAtual.setText(String.format("%.2f €", saldo)); // Exibe o saldo formatado
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar o saldo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+      
     public void carregarDadosLivro(String isbn) {
         String query = "SELECT l.nome, l.autor, c.nome as categoria, l.descricao, l.imagem, l.preco "
                 + "FROM livro l "
@@ -104,6 +136,8 @@ public class VerLivro extends javax.swing.JFrame {
         sair = new javax.swing.JButton();
         verCarrinho = new javax.swing.JButton();
         adicionarCarrinho = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        saldoAtual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(900, 900));
@@ -152,6 +186,11 @@ public class VerLivro extends javax.swing.JFrame {
         });
 
         alugar.setText("Alugar");
+        alugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alugarActionPerformed(evt);
+            }
+        });
 
         sair.setText("Sair");
 
@@ -168,6 +207,8 @@ public class VerLivro extends javax.swing.JFrame {
                 adicionarCarrinhoActionPerformed(evt);
             }
         });
+
+        jLabel8.setText("Saldo atual:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,15 +245,21 @@ public class VerLivro extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(verCarrinho)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(adicionarCarrinho)
                         .addGap(43, 43, 43)
-                        .addComponent(comprar)
-                        .addGap(48, 48, 48)
-                        .addComponent(alugar)
-                        .addGap(79, 79, 79))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(verCarrinho)
-                        .addGap(25, 25, 25))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(saldoAtual))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comprar)
+                                .addGap(48, 48, 48)
+                                .addComponent(alugar)))
+                        .addGap(79, 79, 79))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,7 +302,11 @@ public class VerLivro extends javax.swing.JFrame {
                     .addComponent(comprar)
                     .addComponent(alugar)
                     .addComponent(adicionarCarrinho))
-                .addGap(51, 51, 51))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(saldoAtual))
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -276,6 +327,7 @@ public class VerLivro extends javax.swing.JFrame {
         Carrinho carrinho = Carrinho.getInstance();
 
         carrinho.setVisible(true);
+
     }//GEN-LAST:event_verCarrinhoActionPerformed
 
     private void adicionarCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarCarrinhoActionPerformed
@@ -287,71 +339,104 @@ public class VerLivro extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Erro: Informação do livro incompleta.", "Erro ao Adicionar", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_adicionarCarrinhoActionPerformed
 
     private void comprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarActionPerformed
-    Connection conn = null;
+        Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
     try {
         conn = DatabaseUtil.getConnection();
-        conn.setAutoCommit(false);
+        conn.setAutoCommit(false); // inicia uma transação
 
-        int cartId = generateCartId();
-        String isbn = this.isbnAtual;
-        double preco = Double.parseDouble(jPreco.getText().replace("€", "").replace(",", ".").trim());
+        // obtem o saldo atual do utilizador
+        String saldoSql = "SELECT saldo FROM utilizador WHERE id = ?";
+        pstmt = conn.prepareStatement(saldoSql);
+        pstmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+        rs = pstmt.executeQuery();
 
-        String getIdSql = "SELECT id_livro, copias FROM livro WHERE isbn = ?";
-        PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
-        getIdStmt.setString(1, isbn);
-        ResultSet rs = getIdStmt.executeQuery();
+        double saldoAtual = 0;
+        if (rs.next()) {
+            saldoAtual = rs.getDouble("saldo");
+        }
 
-        if (rs.next() && rs.getInt("copias") > 0) {
-            int livroId = rs.getInt("id_livro");
+        // obtem o preço do livro
+        double precoLivro = Double.parseDouble(jPreco.getText().replace("€", "").replace(",", ".").trim());
 
-            // Atualiza o número de cópias se houver mais que zero disponíveis
-            String updateStockSql = "UPDATE livro SET copias = copias - 1 WHERE id_livro = ? AND copias > 0";
-            PreparedStatement updateStockStmt = conn.prepareStatement(updateStockSql);
-            updateStockStmt.setInt(1, livroId);
-            int updatedRows = updateStockStmt.executeUpdate();
+        // verifica se o saldo é suficiente
+        if (saldoAtual >= precoLivro) {
+            // obtem o id_livro e verificar o stock
+            String getIdSql = "SELECT id_livro, copias FROM livro WHERE isbn = ?";
+            pstmt = conn.prepareStatement(getIdSql);
+            pstmt.setString(1, isbnAtual);
+            rs = pstmt.executeQuery();
 
-            if (updatedRows > 0) {
-                // Insere a transação na tabela de compras com o id_carrinho
-                String insertTransactionSql = "INSERT INTO compra (id_carrinho, id_utilizador, id_livro, data, preco) VALUES (?, ?, ?, NOW(), ?)";
-                PreparedStatement insertTransactionStmt = conn.prepareStatement(insertTransactionSql);
-                insertTransactionStmt.setInt(1, cartId);
-                insertTransactionStmt.setInt(2, SessaoUtilizador.getIdUtilizador());
-                insertTransactionStmt.setInt(3, livroId);
-                insertTransactionStmt.setBigDecimal(4, BigDecimal.valueOf(preco));
-                insertTransactionStmt.executeUpdate();
+            if (rs.next() && rs.getInt("copias") > 0) {
+                int livroId = rs.getInt("id_livro");
 
-                conn.commit();
-                JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!");
+                // atualiza o número de cópias do livro
+                String updateStockSql = "UPDATE livro SET copias = copias - 1 WHERE id_livro = ? AND copias > 0";
+                pstmt = conn.prepareStatement(updateStockSql);
+                pstmt.setInt(1, livroId);
+                int updatedRows = pstmt.executeUpdate();
+
+                if (updatedRows > 0) {
+                    // atualiza o saldo do utilizador
+                    String updateSaldoSql = "UPDATE utilizador SET saldo = saldo - ? WHERE id = ?";
+                    pstmt = conn.prepareStatement(updateSaldoSql);
+                    pstmt.setDouble(1, precoLivro);
+                    pstmt.setInt(2, SessaoUtilizador.getIdUtilizador());
+                    pstmt.executeUpdate();
+
+                    // registra a compra na tabela de compras
+                    String insertCompraSql = "INSERT INTO compra (id_utilizador, id_livro, data, preco) VALUES (?, ?, NOW(), ?)";
+                    pstmt = conn.prepareStatement(insertCompraSql);
+                    pstmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                    pstmt.setInt(2, livroId);
+                    pstmt.setDouble(3, precoLivro);
+                    pstmt.executeUpdate();
+
+                    // confirma a transação
+                    conn.commit();
+                    JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Não há cópias suficientes disponíveis para compra.", "Erro de Estoque", JOptionPane.ERROR_MESSAGE);
+                    conn.rollback();
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Não há cópias suficientes disponíveis para compra.", "Erro de Estoque", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Livro não encontrado na base de dados ou sem stock disponível.", "Erro de Stock", JOptionPane.ERROR_MESSAGE);
                 conn.rollback();
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Livro não encontrado na base de dados ou sem stock disponível.", "Erro de Stock", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Saldo insuficiente para realizar a compra.", "Saldo Insuficiente", JOptionPane.WARNING_MESSAGE);
             conn.rollback();
         }
-    } catch (SQLException ex) {
-        if (conn != null) {
-            try {
-                conn.rollback();
-            } catch (SQLException ex1) {
-                JOptionPane.showMessageDialog(this, "Erro ao desfazer as mudanças: " + ex1.getMessage(), "Erro de Transação", JOptionPane.ERROR_MESSAGE);
-            }
+    } catch (SQLException e) {
+        try {
+            if (conn != null) conn.rollback(); // desfaz a transação em caso de erro
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        JOptionPane.showMessageDialog(this, "Erro ao realizar a compra: " + ex.getMessage(), "Erro de Compra", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Erro ao processar a compra: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     } finally {
         try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
             if (conn != null) {
                 conn.setAutoCommit(true);
+                conn.close();
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao reconfigurar auto-commit: " + ex.getMessage(), "Erro de Configuração", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     }//GEN-LAST:event_comprarActionPerformed
+
+    private void alugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alugarActionPerformed
+      
+    }//GEN-LAST:event_alugarActionPerformed
     private int generateCartId() {
         return (int) (Math.random() * 10000);
     }
@@ -413,9 +498,11 @@ public class VerLivro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jPreco;
     private javax.swing.JLabel jTitulo;
     private javax.swing.JButton sair;
+    private javax.swing.JLabel saldoAtual;
     private javax.swing.JButton verCarrinho;
     private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables

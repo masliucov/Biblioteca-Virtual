@@ -4,6 +4,11 @@
  */
 package pt.ua.estga.bibliotecavirtual;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author arti
@@ -15,8 +20,39 @@ public class DashboardUtilizador extends javax.swing.JFrame {
      */
     public DashboardUtilizador() {
         initComponents();
+       carregarSaldoAtual();
     }
 
+      private void carregarSaldoAtual() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            if (conn != null) {
+                String sql = "SELECT saldo FROM utilizador WHERE id = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, SessaoUtilizador.getIdUtilizador());
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    double saldo = rs.getDouble("saldo");
+                    saldoAtual.setText(String.format("%.2f €", saldo)); // Exibe o saldo formatado
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar o saldo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,6 +69,10 @@ public class DashboardUtilizador extends javax.swing.JFrame {
         editarPerfil = new javax.swing.JButton();
         sair = new javax.swing.JButton();
         verCarrinho = new javax.swing.JButton();
+        verSaldo = new javax.swing.JButton();
+        alugarLivro = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        saldoAtual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -72,30 +112,56 @@ public class DashboardUtilizador extends javax.swing.JFrame {
             }
         });
 
+        verSaldo.setText("Saldo");
+        verSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verSaldoActionPerformed(evt);
+            }
+        });
+
+        alugarLivro.setText("Alugar livro");
+        alugarLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alugarLivroActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Saldo atual:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(106, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(38, 38, 38)
-                .addComponent(sair)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(listaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(verCarrinho, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(verHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(devolverLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                    .addComponent(verCarrinho, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(verSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(alugarLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(verHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(devolverLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)))
                 .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
-                .addGap(127, 127, 127)
+                .addGap(130, 130, 130)
                 .addComponent(editarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(38, 38, 38)
+                        .addComponent(sair)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saldoAtual)
+                        .addGap(43, 43, 43))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,9 +181,17 @@ public class DashboardUtilizador extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(devolverLivro)
                     .addComponent(verCarrinho))
-                .addGap(53, 53, 53)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(verSaldo)
+                    .addComponent(alugarLivro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(editarPerfil)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(saldoAtual))
+                .addContainerGap())
         );
 
         pack();
@@ -163,9 +237,29 @@ public class DashboardUtilizador extends javax.swing.JFrame {
         // Torna a janela Carrinho visível
         carrinhoWindow.setVisible(true);
 
-        // Fecha a janela DashboardUtilizador
-        this.dispose();
     }//GEN-LAST:event_verCarrinhoActionPerformed
+
+    private void verSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verSaldoActionPerformed
+    // Cria uma instância da classe Saldo
+    Saldo saldoWindow = new Saldo();
+
+    // Torna a janela Saldo visível
+    saldoWindow.setVisible(true);
+
+    // Fecha a janela DashboardUtilizador
+    this.dispose();
+    }//GEN-LAST:event_verSaldoActionPerformed
+
+    private void alugarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alugarLivroActionPerformed
+    // Cria uma instância da classe AlugarLivro
+    AlugarLivro alugarWindow = new AlugarLivro();
+
+    // Torna a janela AlugarLivro visível
+    alugarWindow.setVisible(true);
+
+    // Fecha a janela DashboardUtilizador
+    this.dispose();
+    }//GEN-LAST:event_alugarLivroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,12 +297,16 @@ public class DashboardUtilizador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton alugarLivro;
     private javax.swing.JButton devolverLivro;
     private javax.swing.JButton editarPerfil;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JButton listaLivros;
     private javax.swing.JButton sair;
+    private javax.swing.JLabel saldoAtual;
     private javax.swing.JButton verCarrinho;
     private javax.swing.JButton verHistorico;
+    private javax.swing.JButton verSaldo;
     // End of variables declaration//GEN-END:variables
 }
